@@ -2,6 +2,7 @@
 #define FORCE false
 #define OUTPUT true
 
+using namespace std;
 
 int main(int argc, char *argv[]){
 	
@@ -42,4 +43,21 @@ int main(int argc, char *argv[]){
 		cout << "Outputting to " << argv[2] << endl;
 	
 	return 0;
+}
+
+Line::Line(bool isStore, unsigned long address){
+	this->isStore=isStore;
+	this->address=address;
+}
+
+Line::Line(string line){
+	this->isStore=(line[0]=='S');
+	this->address=stol(str.substr(4,12), 0, 16);
+}
+
+FileReader::FileReader(ifstream file){
+	this->file=file;
+	this->read=false;
+	this->lines=vector<Line>();
+	
 }
