@@ -37,8 +37,13 @@ int main(int argc, char *argv[]){
 			return 1;
 		}
 	}
-	
+	cout << "Creating Reader..." << endl;
+	FileReader reader = FileReader(file);
 	cout << "Reading from" << argv[1] << endl;
+	if(!reader.readFile()){
+		cout << "Failed to read file" << endl;
+		return false;
+	}
 	if(OUTPUT)
 		cout << "Outputting to " << argv[2] << endl;
 	
@@ -59,6 +64,11 @@ FileReader::FileReader(ifstream file){
 	this->file=file;
 	this->read=false;
 	this->lines=vector<Line>();
+}
+
+FileReader::FileReader(const FileReader & reader){
+	this->file=ifstream(reader.getFile());
+	this->lines=vector<Line>(reader.getLines());
 }
 
 bool FileReader::readFile(){
@@ -88,4 +98,15 @@ bool FileReader::next(){
 		return true;
 	}
 	return false;
+}
+
+unsigned int DMC::tag_size(){
+	unsigned int num=1;
+	int tag_size=0;
+	unsigned int num_lines = this->numLines();
+	while(num<num_lines){
+		tag_size++;
+		num << 1;
+	}
+	return tag_size;
 }
