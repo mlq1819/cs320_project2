@@ -28,9 +28,6 @@ class FileReader{
 		std::vector<Line> lines;
 		bool read;
 		std::size_t index;
-	protected:
-		std::ifstream * getFile() const {return this->file;};
-		std::vector<Line> * getLines() const {return &this->lines;};
 	public:
 		FileReader(std::ifstream *);
 		bool isRead() const {return this->read;};

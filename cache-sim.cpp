@@ -42,8 +42,10 @@ int main(int argc, char *argv[]){
 	cout << "Reading from" << argv[1] << endl;
 	if(!reader.readFile()){
 		cout << "Failed to read file" << endl;
+		file.close();
 		return false;
 	}
+	file.close();
 	if(OUTPUT)
 		cout << "Outputting to " << argv[2] << endl;
 	
@@ -61,12 +63,12 @@ int main(int argc, char *argv[]){
 }
 
 Line::Line(bool isStore, unsigned long address){
-	this->isStore=isStore;
+	this->is_store=isStore;
 	this->address=address;
 }
 
-Line::Line(string line){
-	this->isStore=(line[0]=='S');
+Line::Line(string str){
+	this->is_store=(str[0]=='S');
 	this->address=stol(str.substr(4,12), 0, 16);
 }
 
@@ -77,22 +79,16 @@ FileReader::FileReader(ifstream * file){
 }
 
 bool FileReader::readFile(){
-	try{
-		if(this->file->isOpen){
-			this->file->clear();
-			this->file->seekg(0, ios_base::beg);
-		} else
-			this->file->open();
-		string str;
-		cout << "Reading file..." << endl;
-		while(getline(*file, str))
-			this->lines.push_back(Line(str));
-		cout << "File read" << endl;
-		this->lines.shrink_to_fit();
-		this->file->close;
-	} catch (exception e){
+	if(!this->file->is_open())
 		return false;
-	}
+	this->file->clear();
+	this->file->seekg(0, ios_base::beg);
+	string str;
+	cout << "Reading file..." << endl;
+	while(getline(*file, str))
+		this->lines.push_back(Line(str));
+	cout << "File read" << endl;
+	this->lines.shrink_to_fit();
 	this->read=true;
 	return true;
 }
@@ -113,7 +109,7 @@ DMC::DMC(FileReader & reader, unsigned int cache_size){
 	unsigned long num_lines = this->numLines();
 	CacheLine lines[num_lines];
 	this->lines = lines;
-	for(unsigned long i=0; i<this->num_lines; i++)
+	for(unsigned long i=0; i<num_lines; i++)
 		this->lines[i]=CacheLine(i);
 }
 
@@ -123,7 +119,7 @@ void DMC::setTagSize(){
 	unsigned int num_lines = this->numLines();
 	while(num<num_lines){
 		this->tag_size++;
-		num << 1;
+		num = num << 1;
 	}
 }
 
