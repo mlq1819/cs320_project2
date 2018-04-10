@@ -100,13 +100,33 @@ bool FileReader::next(){
 	return false;
 }
 
-unsigned int DMC::tag_size(){
+DMC::DMC(FileReader & reader, unsigned int cache_size){
+	this->reader=reader; 
+	this->cache_size=cache_size; 
+	this->tracker=Tracker();
+	this->setTagSize();
+	unsigned long num_lines = this->numLines();
+	CacheLine lines[num_lines];
+	this->lines = lines;
+	for(unsigned long i=0; i<this->num_lines; i++)
+		this->lines[i]=CacheLine(i);
+}
+
+void DMC::setTagSize(){
 	unsigned int num=1;
-	int tag_size=0;
+	this->tag_size=0;
 	unsigned int num_lines = this->numLines();
 	while(num<num_lines){
-		tag_size++;
+		this->tag_size++;
 		num << 1;
 	}
-	return tag_size;
+}
+
+double DMC::run(){
+	if(!this->reader.isRead())
+		this->reader.readFile();
+	else
+		this->reader.start();
+	
+	return this->tracker.percent();
 }

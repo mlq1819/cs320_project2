@@ -49,31 +49,50 @@ class FileReader{
 
 class Tracker{
 	private:
-		unsigned long correct;
+		unsigned long hits;
 		unsigned long total;
 	public:
-		Tracker(){this->correct=this->total=0;};
-		Tracker(const Tracker & tracker){this->correct=tracker.getCorrect(); this->total=tracker.getTotal();};
-		double percent() const {return ((double) this->correct)/this->total * 100;};
-		void addCorrect(){this->correct++; this->total++;};
-		void addWrong(){this->total++;};
-		unsigned long getCorrect() const {return this->correct;};
+		Tracker(){this->hits=this->total=0;};
+		Tracker(const Tracker & tracker){this->hits=tracker.getHits(); this->total=tracker.getTotal();};
+		double percent() const {return ((double) this->hits)/this->total * 100;};
+		void addHit(){this->hit++; this->total++;};
+		void addMiss(){this->total++;};
+		unsigned long getHits() const {return this->hits;};
+		unsigned long getMisses() const {return this->total-this->hits;};
 		unsigned long getTotal() const {return this->total;};
-}
+};
+
+class CacheLine{
+	private:
+		unsigned long index;
+	public:
+		CacheLine(unsigned long index){this->index=index; this->valid=false; this->tag=0;};
+		CacheLine(const CacheLine & o){this->index=o.getIndex(); this->valid=o.valid; this->tag=o.tag;};
+		bool valid;
+		unsigned long tag;
+		unsigned long getIndex() const {return this->index;};
+};
 
 class DMC{
 	private:
 		FileReader reader;
 		unsigned int cache_size;
 		const unsigned int line_size = 32;
+		unsigned int tag_size;
+		CacheLine * lines;
 		Tracker tracker;
+		void setTagSize();
 	public:
-		DMC(FileReader & reader, unsigned int cache_size){this->reader=reader; this->cache_size=cache_size; this->tracker=Tracker();};
-		unsigned int getCacheSize(){return this->cache_size;};
-		Line operator[](std::size_type index){return this->reader[index];};
-		unsigned int numLines(){return cache_size*1024/line_size;};
-		unsigned int tag_size();
-		
+		DMC(FileReader &, unsigned int);
+		unsigned int getCacheSize() const {return this->cache_size;};
+		Line operator[](std::size_type index) const {return this->reader[index];};
+		unsigned long numLines() const {return cache_size*1024/line_size;};
+		unsigned int getTagSize() const {return this->tag_size;};
+		unsigned long getHits() const {return this->tracker.getHits();};
+		unsigned long getMisses() const {return this->tracker.getMisses();};
+		unsigned long getTotal() const {return this->tracker.getTotal();};
+		double percent() const {return this->tracker.percent();};
+		double run();
 };
 
 #endif
