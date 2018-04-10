@@ -5,7 +5,7 @@
 using namespace std;
 
 int main(int argc, char *argv[]){
-	
+	try{
 	if(!FORCE){
 		if((OUTPUT && argc<3) || argc<2){
 			cout << "Not enough arguments" << endl;
@@ -52,12 +52,15 @@ int main(int argc, char *argv[]){
 	unsigned int sizes[] = {1, 4, 16, 32};
 	for(int i=0; i<4; i++){
 		DMC dmc = DMC(&reader, sizes[i]);
-		cout << "Direct-Mapped Cache: " << i << "kB" << endl;
+		cout << "Direct-Mapped Cache: " << sizes[i] << "kB" << endl;
 		cout << dmc.run() << "% Accurate\t" << dmc.getHits() << "," << dmc.getTotal() << endl;
 		if(OUTPUT)
 			output << dmc.getHits() << "," << dmc.getTotal() << ";" << endl;
 	}
-	
+	} catch (exception e){
+		cout << "\nexception caught" << endl;
+		throw exception;
+	}
 	
 	return 0;
 }
