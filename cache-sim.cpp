@@ -1,5 +1,5 @@
 #include "cache-sim.h"
-#define FORCE false
+#define FORCE true
 #define OUTPUT true
 
 using namespace std;
