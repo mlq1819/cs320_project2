@@ -27,7 +27,7 @@ class FileReader{
 		std::ifstream file;
 		std::vector<Line> lines;
 		bool read;
-		std::size_type index;
+		std::size_t index;
 	protected:
 		std::ifstream getFile() const {return this->file;};
 		std::vector<Line> getLines() const {return this->lines;};
@@ -36,15 +36,15 @@ class FileReader{
 		FileReader(const FileReader &);
 		bool isRead() const {return this->read;};
 		bool readFile();
-		Line operator[](std::size_type index) const {return this->lines[index];};
+		Line operator[](std::size_t index) const {return this->lines[index];};
 		bool atStart() const {return this->index==0;};
 		bool atEnd() const {return this->index==this->getSize-1;};
 		bool next();
 		Line current() const {return this->lines[this->index];};
 		void start(){this->index=0;};
 		void end(){this->index=this->getSize()-1;};
-		std::size_type getindex() const {return this->index;};
-		std::size_type getSize() const {return this->lines.size();};
+		std::size_t getindex() const {return this->index;};
+		std::size_t getSize() const {return this->lines.size();};
 };
 
 class Tracker{
@@ -85,7 +85,7 @@ class DMC{
 	public:
 		DMC(FileReader &, unsigned int);
 		unsigned int getCacheSize() const {return this->cache_size;};
-		Line operator[](std::size_type index) const {return this->reader[index];};
+		Line operator[](std::size_t index) const {return this->reader[index];};
 		unsigned long numLines() const {return cache_size*1024/line_size;};
 		unsigned int getTagSize() const {return this->tag_size;};
 		unsigned long getHits() const {return this->tracker.getHits();};
