@@ -38,7 +38,7 @@ int main(int argc, char *argv[]){
 		}
 	}
 	cout << "Creating Reader..." << endl;
-	FileReader reader = FileReader(file);
+	FileReader reader = FileReader(&file);
 	cout << "Reading from" << argv[1] << endl;
 	if(!reader.readFile()){
 		cout << "Failed to read file" << endl;
@@ -70,31 +70,26 @@ Line::Line(string line){
 	this->address=stol(str.substr(4,12), 0, 16);
 }
 
-FileReader::FileReader(ifstream file){
+FileReader::FileReader(ifstream * file){
 	this->file=file;
 	this->read=false;
 	this->lines=vector<Line>();
 }
 
-FileReader::FileReader(const FileReader & reader){
-	this->file=ifstream(reader.getFile());
-	this->lines=vector<Line>(reader.getLines());
-}
-
 bool FileReader::readFile(){
 	try{
-		if(this->file.isOpen){
-			this->file.clear();
-			this->file.seekg(0, ios_base::beg);
+		if(this->file->isOpen){
+			this->file->clear();
+			this->file->seekg(0, ios_base::beg);
 		} else
-			this->file.open();
+			this->file->open();
 		string str;
 		cout << "Reading file..." << endl;
 		while(getline(*file, str))
 			this->lines.push_back(Line(str));
 		cout << "File read" << endl;
 		this->lines.shrink_to_fit();
-		this->file.close;
+		this->file->close;
 	} catch (exception e){
 		return false;
 	}

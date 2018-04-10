@@ -24,21 +24,20 @@ class Line{
 
 class FileReader{
 	private:
-		std::ifstream file;
+		std::ifstream * file;
 		std::vector<Line> lines;
 		bool read;
 		std::size_t index;
 	protected:
-		std::ifstream getFile() const {return this->file;};
-		std::vector<Line> getLines() const {return this->lines;};
+		std::ifstream * getFile() const {return this->file;};
+		std::vector<Line> * getLines() const {return &this->lines;};
 	public:
-		FileReader(std::ifstream);
-		FileReader(const FileReader &);
+		FileReader(std::ifstream *);
 		bool isRead() const {return this->read;};
 		bool readFile();
 		Line operator[](std::size_t index) const {return this->lines[index];};
 		bool atStart() const {return this->index==0;};
-		bool atEnd() const {return this->index==this->getSize-1;};
+		bool atEnd() const {return this->index==this->getSize()-1;};
 		bool next();
 		Line current() const {return this->lines[this->index];};
 		void start(){this->index=0;};
@@ -55,7 +54,7 @@ class Tracker{
 		Tracker(){this->hits=this->total=0;};
 		Tracker(const Tracker & tracker){this->hits=tracker.getHits(); this->total=tracker.getTotal();};
 		double percent() const {return ((double) this->hits)/this->total * 100;};
-		void addHit(){this->hit++; this->total++;};
+		void addHit(){this->hits++; this->total++;};
 		void addMiss(){this->total++;};
 		unsigned long getHits() const {return this->hits;};
 		unsigned long getMisses() const {return this->total-this->hits;};
