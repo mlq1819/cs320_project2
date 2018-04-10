@@ -51,7 +51,7 @@ int main(int argc, char *argv[]){
 	
 	unsigned int sizes[] = {1, 4, 16, 32};
 	for(int i=0; i<4; i++){
-		DMC dmc = DMC(&reader, i);
+		DMC dmc = DMC(&reader, sizes[i]);
 		cout << "Direct-Mapped Cache: " << i << "kB" << endl;
 		cout << dmc.run() << "% Accurate\t" << dmc.getHits() << "," << dmc.getTotal() << endl;
 		if(OUTPUT)
