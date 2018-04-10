@@ -10,14 +10,14 @@
 
 class Line{
 	private:
-		bool isStore;
+		bool is_store;
 		unsigned long address;
 	public:
-		Line(bool, address);
+		Line(bool, unsigned long);
 		Line(std::string);
-		Line(const Line & line){this->isStore=line.isStore(); this->address=line.getAddress();};
-		bool isStore() const {return this->isStore;};
-		bool isLoad() const {return !this->isStore;};
+		Line(const Line & line){this->is_store=line.isStore(); this->address=line.getAddress();};
+		bool isStore() const {return this->is_store;};
+		bool isLoad() const {return !this->is_store;};
 		unsigned long getAddress() const {return this->address;};
 		
 };
