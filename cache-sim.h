@@ -93,6 +93,7 @@ class DMC{
 		unsigned long getTotal() const {return this->tracker.getTotal();};
 		double percent() const {return this->tracker.percent();};
 		double run();
+		bool step();
 };
 
 #endif

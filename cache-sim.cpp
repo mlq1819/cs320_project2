@@ -47,6 +47,16 @@ int main(int argc, char *argv[]){
 	if(OUTPUT)
 		cout << "Outputting to " << argv[2] << endl;
 	
+	unsigned int sizes[] = {1, 4, 16, 32};
+	for(int i=0; i<4; i++){
+		DMC dmc = DMC(reader, i);
+		cout << "Direct-Mapped Cache: " << i << "kB" << endl;
+		cout << dmc.run() << "% Accurate\t" << dmc.getHits() << "," << dmc.getTotal() << endl;
+		if(OUTPUT)
+			output << dmc.getHits() << "," << dmc.getTotal() << ";" << endl;
+	}
+	
+	
 	return 0;
 }
 
@@ -127,6 +137,23 @@ double DMC::run(){
 		this->reader.readFile();
 	else
 		this->reader.start();
-	
+	do{
+		this->step();
+	} while (this->reader.next());
 	return this->tracker.percent();
+}
+
+bool DMC::step(){
+	Line current = this->reader.current();
+	unsigned long index = current.getAddress() >> this->tag_size;
+	unsigned long tag = current.getAddress()%(1 << this->tag_size);
+	if(this->lines[index].valid && this->lines[index].tag==tag){
+		this->tracker.addHit();
+		return true;
+	}
+	this->tracker.addMiss();
+	this->lines[index].tag=tag;
+	this->lines[index].valid=true;
+	return false;
+	
 }
