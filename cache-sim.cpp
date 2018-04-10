@@ -59,7 +59,7 @@ int main(int argc, char *argv[]){
 	}
 	} catch (exception e){
 		cout << "\nexception caught" << endl;
-		throw exception;
+		throw e;
 	}
 	
 	return 0;
