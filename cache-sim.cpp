@@ -51,7 +51,7 @@ int main(int argc, char *argv[]){
 	
 	unsigned int sizes[] = {1, 4, 16, 32};
 	for(int i=0; i<4; i++){
-		DMC dmc = DMC(reader, i);
+		DMC dmc = DMC(&reader, i);
 		cout << "Direct-Mapped Cache: " << i << "kB" << endl;
 		cout << dmc.run() << "% Accurate\t" << dmc.getHits() << "," << dmc.getTotal() << endl;
 		if(OUTPUT)
@@ -101,7 +101,7 @@ bool FileReader::next(){
 	return false;
 }
 
-DMC::DMC(FileReader & reader, unsigned int cache_size){
+DMC::DMC(FileReader * reader, unsigned int cache_size){
 	this->reader=reader; 
 	this->cache_size=cache_size; 
 	this->tracker=Tracker();
@@ -124,18 +124,18 @@ void DMC::setTagSize(){
 }
 
 double DMC::run(){
-	if(!this->reader.isRead())
-		this->reader.readFile();
+	if(!this->reader->isRead())
+		this->reader->readFile();
 	else
-		this->reader.start();
+		this->reader->start();
 	do{
 		this->step();
-	} while (this->reader.next());
+	} while (this->reader->next());
 	return this->tracker.percent();
 }
 
 bool DMC::step(){
-	Line current = this->reader.current();
+	Line current = this->reader->current();
 	unsigned long index = current.getAddress() >> this->tag_size;
 	unsigned long tag = current.getAddress()%(1 << this->tag_size);
 	if(this->lines[index].valid && this->lines[index].tag==tag){

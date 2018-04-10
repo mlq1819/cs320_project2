@@ -30,6 +30,7 @@ class FileReader{
 		std::size_t index;
 	public:
 		FileReader(std::ifstream *);
+		~FileReader(){file=NULL;};
 		bool isRead() const {return this->read;};
 		bool readFile();
 		Line operator[](std::size_t index) const {return this->lines[index];};
@@ -71,7 +72,7 @@ class CacheLine{
 
 class DMC{
 	private:
-		FileReader reader;
+		FileReader * reader;
 		unsigned int cache_size;
 		const unsigned int line_size = 32;
 		unsigned int tag_size;
@@ -81,7 +82,7 @@ class DMC{
 	public:
 		DMC(FileReader &, unsigned int);
 		unsigned int getCacheSize() const {return this->cache_size;};
-		Line operator[](std::size_t index) const {return this->reader[index];};
+		Line operator[](std::size_t index) const {return (*this->reader)[index];};
 		unsigned long numLines() const {return cache_size*1024/line_size;};
 		unsigned int getTagSize() const {return this->tag_size;};
 		unsigned long getHits() const {return this->tracker.getHits();};
