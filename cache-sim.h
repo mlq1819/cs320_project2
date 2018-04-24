@@ -77,9 +77,12 @@ class DMC{
 		unsigned int cache_size;
 		const unsigned int line_size = 32;
 		unsigned int tag_size;
+		unsigned int index_size;
+		unsigned int index_max;
+		unsigned int tag_max;
 		CacheLine * lines;
 		Tracker tracker;
-		void setTagSize();
+		void setSizesAndMaxes();
 	public:
 		DMC(FileReader *, unsigned int);
 		unsigned int getCacheSize() const {return this->cache_size;};

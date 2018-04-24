@@ -39,7 +39,7 @@ int main(int argc, char *argv[]){
 	}
 	cout << "Creating Reader..." << endl;
 	FileReader reader = FileReader(&file);
-	cout << "Reading from" << argv[1] << endl;
+	cout << "Reading from " << argv[1] << "..." << endl;
 	if(!reader.readFile()){
 		cout << "Failed to read file" << endl;
 		file.close();
@@ -108,22 +108,26 @@ DMC::DMC(FileReader * reader, unsigned int cache_size){
 	this->reader=reader; 
 	this->cache_size=cache_size; 
 	this->tracker=Tracker();
-	this->setTagSize();
+	this->setSizesAndMaxes();
 	unsigned long num_lines = this->numLines();
 	CacheLine temp_lines[num_lines];
 	this->lines = temp_lines;
-	for(unsigned long i=0; i<num_lines; i++)
-		this->lines[i]=CacheLine(i) >> this->tag_size;
+	for(unsigned long i=0; i<index_max; i++)
+		this->lines[i]=CacheLine(i);
 }
 
-void DMC::setTagSize(){
-	unsigned int num=1;
+void DMC::setSizesAndMaxes(){
+	this->tag_max=1;
 	this->tag_size=0;
 	unsigned int num_lines = this->numLines();
-	while(num<num_lines){
+	while(this->tag_max<<num_lines){
 		this->tag_size++;
-		num = num << 1;
+		this->tag_max = this->tag_max << 1;
 	}
+	this->index_size=128-this->tag_size;
+	this->index_max=1;
+	for(unsigned int i=1; i<this->index_size; i++)
+		this->index_max = this->index_max << 1;
 }
 
 double DMC::run(){
