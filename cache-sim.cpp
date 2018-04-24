@@ -113,7 +113,7 @@ DMC::DMC(FileReader * reader, unsigned int cache_size){
 	CacheLine temp_lines[num_lines];
 	this->lines = temp_lines;
 	for(unsigned long i=0; i<num_lines; i++)
-		this->lines[i]=CacheLine(i);
+		this->lines[i]=CacheLine(i) >> this->tag_size;
 }
 
 void DMC::setTagSize(){
