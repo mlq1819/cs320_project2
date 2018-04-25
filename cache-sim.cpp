@@ -1,6 +1,7 @@
 #include "cache-sim.h"
 #define FORCE false
 #define OUTPUT true
+#define DEBUG true
 
 using namespace std;
 
@@ -117,13 +118,17 @@ DMC::DMC(FileReader * reader, unsigned int cache_size){
 }
 
 void DMC::setTagSize(){
-	unsigned int num=1;
+	this->tag_max=1;
 	this->tag_size=0;
 	unsigned int num_lines = this->numLines();
 	while(num<num_lines){
 		this->tag_size++;
-		num = num << 1;
+		this->tag_max*=2;
 	}
+	this->index_size=128-this->tag_size;
+	this->index_max=1;
+	for(unsigned int i=1; i<this->index_size; i++)
+		this->index_max = this->index_max*=2;
 }
 
 double DMC::run(){
