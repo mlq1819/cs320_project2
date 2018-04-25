@@ -23,7 +23,7 @@ cleargdb:
 	clear
 	clear
 	make all
-	gdb "./$(P) trace1.txt output.txt"
+	gdb --args ./$(P) trace1.txt output.txt
 	
 run: all
 	rm -rf st1_output.txt
