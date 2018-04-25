@@ -69,6 +69,7 @@ class CacheLine{
 		bool valid;
 		unsigned long tag;
 		unsigned long getIndex() const {return this->index;};
+		void printLine();
 };
 
 class DMC{
@@ -83,6 +84,7 @@ class DMC{
 		CacheLine * lines;
 		Tracker tracker;
 		void setSizesAndMaxes();
+		void printCache();
 	public:
 		DMC(FileReader *, unsigned int);
 		unsigned int getCacheSize() const {return this->cache_size;};

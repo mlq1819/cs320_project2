@@ -55,7 +55,7 @@ int main(int argc, char *argv[]){
 		DMC dmc = DMC(&reader, sizes[i]);
 		cout << "Direct-Mapped Cache: " << sizes[i] << "kB" << endl;
 		dmc.run();
-		cout << dmc.percent() << "% Accurate: " << dmc.getHits() << "," << dmc.getTotal() << endl;
+		cout << dmc.percent() << "% Accurate: " << dmc.getHits() << ", " << dmc.getTotal() << endl;
 		if(OUTPUT)
 			output << dmc.getHits() << "," << dmc.getTotal() << ";" << endl;
 	}
@@ -104,6 +104,14 @@ bool FileReader::next(){
 		return true;
 	}
 	return false;
+}
+
+void CacheLine::printLine(){
+	if(this->valid)
+		cout << "1:";
+	else
+		cout << "0:";
+	cout << this->index << ":" << this->tag;
 }
 
 DMC::DMC(FileReader * reader, unsigned int cache_size){
@@ -155,15 +163,23 @@ bool DMC::step(){
 	unsigned long tag = current.getAddress()%this->tag_max;
 	if(this->lines[index].valid && this->lines[index].tag==tag){
 		if(DEBUG)
-			cout << "H";
+			this->printCache();
 		this->tracker.addHit();
 		return true;
 	}
-	if(DEBUG)
-		cout << ".";
 	this->tracker.addMiss();
 	this->lines[index].tag=tag;
 	this->lines[index].valid=true;
 	return false;
 	
+}
+
+void DMC::printCache(){
+	unsigned long num_lines=this->numLines();
+	for(unsigned long i; i<num_lines; i++){
+		cout << i << ": ";
+		this->lines[i].printLine();
+		cout << endl;
+	}
+	cout << endl;
 }
