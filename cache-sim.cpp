@@ -1,5 +1,5 @@
 #include "cache-sim.h"
-#define FORCE true
+#define FORCE false
 #define OUTPUT true
 #define DEBUG true
 
@@ -59,7 +59,7 @@ int main(int argc, char *argv[]){
 			output << dmc.getHits() << "," << dmc.getTotal() << ";" << endl;
 	}
 	} catch (exception e){
-		cout << "\nexception caught" << endl;
+		cout << "\nException caught" << endl;
 		throw e;
 	}
 	
@@ -128,10 +128,10 @@ void DMC::setSizesAndMaxes(){
 	this->index_size=128-this->tag_size;
 	this->index_max=1;
 	for(unsigned int i=1; i<this->index_size; i++)
-		this->index_max = this->index_max << 1;
+		this->index_max = this->index_max*=2;
 }
 
-double DMC::run(){
+Double DMC::run(){
 	if(!this->reader->isRead())
 		this->reader->readFile();
 	else
@@ -144,11 +144,17 @@ double DMC::run(){
 
 bool DMC::step(){
 	Line current = this->reader->current();
+<<<<<<< HEAD
 	unsigned long index = current.getAddress()/this->tag_max;
 	unsigned long tag = current.getAddress()%(this->tag_max+1);
 	if(this->lines[index].valid && this->lines[index].tag==tag){
 		if(DEBUG)
 			cout << "Line " << this->reader->getIndex() << " Hit!" << endl;
+=======
+	unsigned long index = current.getAddress() >> this->tag_size;
+	unsigned long tag = current.getAddress()%(1 << this->tag_size);
+	if(this->lines)[index].valid && this->lines[index].tag==tag){
+>>>>>>> 5af4cc56557ea5c911b87bcc2e957d38208a85a8
 		this->tracker.addHit();
 		return true;
 	}
