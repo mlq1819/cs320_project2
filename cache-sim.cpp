@@ -159,7 +159,7 @@ bool DMC::step(){
 		return true;
 	}
 	if(DEBUG)
-		cout << "M";
+		cout << ".";
 	this->tracker.addMiss();
 	this->lines[index].tag=tag;
 	this->lines[index].valid=true;
