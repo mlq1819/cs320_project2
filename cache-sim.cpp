@@ -190,6 +190,8 @@ void DMC::printCache(){
 		cout << i << ": ";
 		this->lines[i].printLine();
 		cout << ";  ";
+		if(i%25==24)
+			cout << endl;
 	}
 	cout << "\n" <<endl;
 }
