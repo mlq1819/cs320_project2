@@ -125,9 +125,9 @@ void DMC::setSizesAndMaxes(){
 	this->tag_max=1;
 	this->tag_size=0;
 	unsigned int num_lines = this->numLines();
-	while(this->tag_max<<num_lines){
+	while(this->tag_max<num_lines){
 		this->tag_size++;
-		this->tag_max*=2;
+		this->tag_max=this->tag_max*2;
 	}
 	this->index_size=128-this->tag_size;
 	this->index_max=1;
