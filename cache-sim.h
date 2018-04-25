@@ -85,6 +85,7 @@ class DMC{
 		Tracker tracker;
 		void setSizesAndMaxes();
 		void printCache();
+		void printVars();
 	public:
 		DMC(FileReader *, unsigned int);
 		unsigned int getCacheSize() const {return this->cache_size;};

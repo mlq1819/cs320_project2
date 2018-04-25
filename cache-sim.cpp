@@ -2,6 +2,7 @@
 #define FORCE false
 #define OUTPUT true
 #define DEBUG true
+#define FINEDEB true
 
 using namespace std;
 
@@ -154,26 +155,29 @@ double DMC::run(){
 	} while (this->reader->next());
 	if(DEBUG){
 		cout << endl;
-		this->printCache();
+		if(FINEDEB)
+			this->printCache();
+		this->printVars();
 	}
 	return this->tracker.percent();
 }
 
 bool DMC::step(){
 	Line current = this->reader->current();
+	//currently, there is an issue with index, where it is not evaluating properly, causing significantly more misses than it should be
 	unsigned long index = current.getAddress()/this->tag_max;
 	unsigned long tag = current.getAddress()%this->tag_max;
 	if(this->lines[index].valid && this->lines[index].tag==tag){
-		if(DEBUG){
-			cout << "Hit:\t" << current.getAddress() << "\t";
+		if(FINEDEB){
+			cout << "Hit:\t" << current.getAddress() << ":\t";
 			this->lines[index].printLine();
 			cout << endl;
 		}
 		this->tracker.addHit();
 		return true;
 	}
-	if(DEBUG){
-			cout << "Miss:\t" << current.getAddress() << "\t";
+	if(FINEDEB){
+			cout << "Miss:\t" << current.getAddress() << ":\t";
 			this->lines[index].printLine();
 			cout << endl;
 		}
@@ -194,4 +198,12 @@ void DMC::printCache(){
 			cout << endl;
 	}
 	cout << "\n" <<endl;
+}
+
+void DMC::printVars(){
+	cout << "cache_size:" << this->cache_size << endl;
+	cout << "line_size:" << this->line_size << endl;
+	cout << "index_size:" << this->index_size << endl;
+	cout << "tag_size:" << this->tag_size << endl;
+	cout << "numLines():" << this->numLines() << endl;
 }
