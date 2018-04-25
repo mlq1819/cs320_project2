@@ -20,6 +20,7 @@ clearmem:
 	make mem
 	
 cleargdb:
+	git pull
 	clear
 	clear
 	make all

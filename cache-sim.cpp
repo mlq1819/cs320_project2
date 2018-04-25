@@ -148,8 +148,8 @@ double DMC::run(){
 
 bool DMC::step(){
 	Line current = this->reader->current();
-	unsigned long index = current.getAddress()/this->tag_max;
-	unsigned long tag = current.getAddress()%(this->tag_max+1);
+	unsigned long index = current.getAddress()>>tag_size;
+	unsigned long tag = current.getAddress()%this->tag_max;
 	if(this->lines[index].valid && this->lines[index].tag==tag){
 		if(DEBUG)
 			cout << "Line " << this->reader->getIndex() << " Hit!" << endl;
