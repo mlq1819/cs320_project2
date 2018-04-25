@@ -155,8 +155,7 @@ double DMC::run(){
 	} while (this->reader->next());
 	if(DEBUG){
 		cout << endl;
-		if(FINEDEB)
-			this->printCache();
+		this->printCache();
 		this->printVars();
 	}
 	return this->tracker.percent();
