@@ -84,6 +84,7 @@ class DMC{
 		CacheLine * lines;
 		Tracker tracker;
 		void setSizesAndMaxes();
+		unsigned long maxAddress() const;
 		void printCache();
 		void printVars();
 	public:
