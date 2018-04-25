@@ -1,5 +1,5 @@
 #include "cache-sim.h"
-#define FORCE true
+#define FORCE false
 #define OUTPUT true
 
 using namespace std;
@@ -58,7 +58,7 @@ int main(int argc, char *argv[]){
 			output << dmc.getHits() << "," << dmc.getTotal() << ";" << endl;
 	}
 	} catch (exception e){
-		cout << "\nexception caught" << endl;
+		cout << "\nException caught" << endl;
 		throw e;
 	}
 	
@@ -141,7 +141,7 @@ bool DMC::step(){
 	Line current = this->reader->current();
 	unsigned long index = current.getAddress() >> this->tag_size;
 	unsigned long tag = current.getAddress()%(1 << this->tag_size);
-	if(this->lines[index].valid && this->lines[index].tag==tag){
+	if(this->lines)[index].valid && this->lines[index].tag==tag){
 		this->tracker.addHit();
 		return true;
 	}
