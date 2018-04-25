@@ -2,7 +2,7 @@
 #define FORCE false
 #define OUTPUT true
 #define DEBUG true
-#define FINEDEB true
+#define FINEDEB false
 
 using namespace std;
 
