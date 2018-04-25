@@ -186,7 +186,7 @@ bool DMC::step(){
 
 void DMC::printCache(){
 	unsigned long num_lines=this->numLines();
-	for(unsigned long i; i<num_lines; i++){
+	for(unsigned long i=0; i<num_lines; i++){
 		cout << i << ": ";
 		this->lines[i].printLine();
 		cout << ";  ";
