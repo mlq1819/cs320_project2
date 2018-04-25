@@ -144,17 +144,14 @@ Double DMC::run(){
 
 bool DMC::step(){
 	Line current = this->reader->current();
-<<<<<<< HEAD
 	unsigned long index = current.getAddress()/this->tag_max;
 	unsigned long tag = current.getAddress()%(this->tag_max+1);
 	if(this->lines[index].valid && this->lines[index].tag==tag){
 		if(DEBUG)
 			cout << "Line " << this->reader->getIndex() << " Hit!" << endl;
-=======
 	unsigned long index = current.getAddress() >> this->tag_size;
 	unsigned long tag = current.getAddress()%(1 << this->tag_size);
 	if(this->lines)[index].valid && this->lines[index].tag==tag){
->>>>>>> 5af4cc56557ea5c911b87bcc2e957d38208a85a8
 		this->tracker.addHit();
 		return true;
 	}
