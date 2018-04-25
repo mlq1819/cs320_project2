@@ -127,7 +127,7 @@ DMC::DMC(FileReader * reader, unsigned int cache_size){
 	unsigned long num_lines = this->numLines();
 	CacheLine temp_lines[num_lines];
 	this->lines = temp_lines;
-	for(unsigned long i=0; i<=index_max; i++)
+	for(unsigned long i=0; i<index_max; i++)
 		this->lines[i]=CacheLine(i);
 }
 
@@ -164,7 +164,7 @@ double DMC::run(){
 bool DMC::step(){
 	Line current = this->reader->current();
 	//currently, there is an issue with index, where it is not evaluating properly, causing significantly more misses than it should be
-	unsigned long index = current.getAddress()/this->tag_max;
+	unsigned long index = (current.getAddress()>>this->tag_size)%this->index_max;
 	unsigned long tag = current.getAddress()%this->tag_max;
 	if(this->lines[index].valid && this->lines[index].tag==tag){
 		if(FINEDEB){
@@ -192,7 +192,7 @@ void DMC::printCache(){
 	for(unsigned long i=0; i<num_lines; i++){
 		cout << i << ": ";
 		this->lines[i].printLine();
-		cout << ";  ";
+		cout << "; \t";
 		if(i%16==15)
 			cout << endl;
 	}
