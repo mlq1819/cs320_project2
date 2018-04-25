@@ -19,11 +19,13 @@ clearmem:
 	clear
 	make mem
 	
-clearpull:
-	git pull
+cleargdb:
 	clear
 	clear
-	make clear
+	make all
+	gdb ./$(P) trace1.txt output.txt
+	layout src
+	run
 	
 run: all
 	rm -rf st1_output.txt
