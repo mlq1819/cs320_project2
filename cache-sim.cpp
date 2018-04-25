@@ -203,7 +203,7 @@ void DMC::printVars(){
 	cout << "cache_size:\t" << this->cache_size << "\tkB\t|" << endl;
 	cout << "--------------------------------+---------------------------" << endl;
 	cout << "line_size: \t" << this->line_size << "\tbits\t|" << endl;
-	cout << "index_size:\t" << this->index_size << "\tbits\t|index_max: \t" << this->index_max << endl;
-	cout << "tag_size:  \t" << this->tag_size << "\tbits\t|tag_max:   \t" << this->tag_max << endl;
+	cout << "index_size:\t" << this->index_size << "\tbits\t| index_max: \t" << this->index_max << endl;
+	cout << "tag_size:  \t" << this->tag_size << "\tbits\t| tag_max:   \t" << this->tag_max << endl;
 	cout << "numLines():\t" << this->numLines() << "\tlines\t|\n\n" << endl;
 }
