@@ -162,8 +162,11 @@ bool DMC::step(){
 	unsigned long index = current.getAddress()>>tag_size;
 	unsigned long tag = current.getAddress()%this->tag_max;
 	if(this->lines[index].valid && this->lines[index].tag==tag){
-		if(DEBUG)
+		if(DEBUG){
+			cout << "Hit: ";
 			this->lines[index].printLine();
+			cout << endl;
+		}
 		this->tracker.addHit();
 		return true;
 	}
