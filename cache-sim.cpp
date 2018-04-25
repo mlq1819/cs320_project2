@@ -128,7 +128,7 @@ void DMC::setSizesAndMaxes(){
 	this->index_size=128-this->tag_size;
 	this->index_max=1;
 	for(unsigned int i=1; i<this->index_size; i++)
-		this->index_max = this->index_max*=2;
+		this->index_max=this->index_max*2;
 }
 
 double DMC::run(){
