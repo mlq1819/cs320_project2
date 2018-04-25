@@ -122,17 +122,17 @@ DMC::DMC(FileReader * reader, unsigned int cache_size){
 }
 
 void DMC::setSizesAndMaxes(){
-	this->tag_max=1;
-	this->tag_size=0;
-	unsigned int num_lines = this->numLines();
-	while(this->tag_max<num_lines){
-		this->tag_size++;
-		this->tag_max=this->tag_max*2;
-	}
-	this->index_size=128-this->tag_size;
 	this->index_max=1;
-	for(unsigned int i=1; i<this->index_size; i++)
+	this->index_size=0;
+	unsigned int num_lines = this->numLines();
+	while(this->index_max<num_lines){
+		this->index_size++;
 		this->index_max=this->index_max*2;
+	}
+	this->tag_size=128-this->index_size;
+	this->tag_max=1;
+	for(unsigned int i=1; i<this->tag_size; i++)
+		this->tag_max=this->tag_max*2;
 }
 
 double DMC::run(){
