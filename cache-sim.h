@@ -40,7 +40,7 @@ class FileReader{
 		Line current() const {return this->lines[this->index];};
 		void start(){this->index=0;};
 		void end(){this->index=this->getSize()-1;};
-		std::size_t getindex() const {return this->index;};
+		std::size_t getIndex() const {return this->index;};
 		std::size_t getSize() const {return this->lines.size();};
 };
 

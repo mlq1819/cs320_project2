@@ -1,6 +1,7 @@
 #include "cache-sim.h"
 #define FORCE true
 #define OUTPUT true
+#define DEBUG true
 
 using namespace std;
 
@@ -112,7 +113,7 @@ DMC::DMC(FileReader * reader, unsigned int cache_size){
 	unsigned long num_lines = this->numLines();
 	CacheLine temp_lines[num_lines];
 	this->lines = temp_lines;
-	for(unsigned long i=0; i<index_max; i++)
+	for(unsigned long i=0; i<=index_max; i++)
 		this->lines[i]=CacheLine(i);
 }
 
@@ -122,7 +123,7 @@ void DMC::setSizesAndMaxes(){
 	unsigned int num_lines = this->numLines();
 	while(this->tag_max<<num_lines){
 		this->tag_size++;
-		this->tag_max = this->tag_max << 1;
+		this->tag_max*=2;
 	}
 	this->index_size=128-this->tag_size;
 	this->index_max=1;
@@ -143,9 +144,11 @@ double DMC::run(){
 
 bool DMC::step(){
 	Line current = this->reader->current();
-	unsigned long index = current.getAddress() >> this->tag_size;
-	unsigned long tag = current.getAddress()%(1 << this->tag_size);
+	unsigned long index = current.getAddress()/this->tag_max;
+	unsigned long tag = current.getAddress()%(this->tag_max+1);
 	if(this->lines[index].valid && this->lines[index].tag==tag){
+		if(DEBUG)
+			cout << "Line " << this->reader->getIndex() << " Hit!" << endl;
 		this->tracker.addHit();
 		return true;
 	}
