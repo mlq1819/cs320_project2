@@ -109,6 +109,10 @@ DMC::DMC(FileReader * reader, unsigned int cache_size){
 	this->reader=reader; 
 	this->cache_size=cache_size; 
 	this->tracker=Tracker();
+	this->tag_max=1;
+	this->tag_size=1;
+	this->index_max=1;
+	this->index_size=1;
 	this->setSizesAndMaxes();
 	unsigned long num_lines = this->numLines();
 	CacheLine temp_lines[num_lines];
