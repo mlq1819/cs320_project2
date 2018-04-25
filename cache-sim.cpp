@@ -131,7 +131,7 @@ void DMC::setSizesAndMaxes(){
 		this->index_max = this->index_max*=2;
 }
 
-Double DMC::run(){
+double DMC::run(){
 	if(!this->reader->isRead())
 		this->reader->readFile();
 	else
@@ -149,9 +149,6 @@ bool DMC::step(){
 	if(this->lines[index].valid && this->lines[index].tag==tag){
 		if(DEBUG)
 			cout << "Line " << this->reader->getIndex() << " Hit!" << endl;
-	unsigned long index = current.getAddress() >> this->tag_size;
-	unsigned long tag = current.getAddress()%(1 << this->tag_size);
-	if(this->lines)[index].valid && this->lines[index].tag==tag){
 		this->tracker.addHit();
 		return true;
 	}
