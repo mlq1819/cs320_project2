@@ -161,7 +161,7 @@ double DMC::run(){
 
 bool DMC::step(){
 	Line current = this->reader->current();
-	unsigned long index = current.getAddress()>>tag_size;
+	unsigned long index = current.getAddress()/this->tag_max;
 	unsigned long tag = current.getAddress()%this->tag_max;
 	if(this->lines[index].valid && this->lines[index].tag==tag){
 		if(DEBUG){
@@ -190,7 +190,7 @@ void DMC::printCache(){
 		cout << i << ": ";
 		this->lines[i].printLine();
 		cout << ";  ";
-		if(i%25==24)
+		if(i%16==15)
 			cout << endl;
 	}
 	cout << "\n" <<endl;
