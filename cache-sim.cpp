@@ -143,6 +143,8 @@ double DMC::run(){
 	do{
 		this->step();
 	} while (this->reader->next());
+	if(DEBUG)
+		cout << endl;
 	return this->tracker.percent();
 }
 
@@ -152,10 +154,12 @@ bool DMC::step(){
 	unsigned long tag = current.getAddress()%this->tag_max;
 	if(this->lines[index].valid && this->lines[index].tag==tag){
 		if(DEBUG)
-			cout << "Line " << this->reader->getIndex() << " Hit!" << endl;
+			cout << "H";
 		this->tracker.addHit();
 		return true;
 	}
+	if(DEBUG)
+		cout << "M";
 	this->tracker.addMiss();
 	this->lines[index].tag=tag;
 	this->lines[index].valid=true;
