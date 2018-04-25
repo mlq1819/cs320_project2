@@ -196,17 +196,17 @@ void DMC::printCache(){
 		if(i%16==15)
 			cout << endl;
 	}
-	cout << "\n" <<endl;
+	cout <<endl;
 }
 
 void DMC::printVars(){
-	cout << "cache_size:" << this->cache_size << endl;
+	cout << "cache_size:" << this->cache_size << "kB" << endl;
 	cout << "----------------" << endl;
-	cout << "line_size:" << this->line_size << endl;
-	cout << "index_size:" << this->index_size << endl;
-	cout << "tag_size:" << this->tag_size << endl;
-	cout << "numLines():" << this->numLines() << endl;
+	cout << "line_size:" << this->line_size << " bits" << endl;
+	cout << "index_size:" << this->index_size << " bits" <<endl;
+	cout << "tag_size:" << this->tag_size << " bits" <<endl;
+	cout << "numLines():" << this->numLines() << " lines" << endl;
 	cout << "----------------" << endl;
 	cout << "index_max:" << this->index_max << endl;
-	cout << "tag_max:" << this->tag_max << endl;
+	cout << "tag_max:" << this->tag_max << "\n\n" << endl;
 }
