@@ -179,7 +179,7 @@ void DMC::printCache(){
 	for(unsigned long i; i<num_lines; i++){
 		cout << i << ": ";
 		this->lines[i].printLine();
-		cout << endl;
+		cout << ";  ";
 	}
-	cout << endl;
+	cout << "\n" <<endl;
 }
