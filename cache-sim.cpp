@@ -163,7 +163,7 @@ bool DMC::step(){
 	unsigned long tag = current.getAddress()%this->tag_max;
 	if(this->lines[index].valid && this->lines[index].tag==tag){
 		if(DEBUG)
-			this->cacheLines[index].printLine()
+			this->lines[index].printLine();
 		this->tracker.addHit();
 		return true;
 	}
