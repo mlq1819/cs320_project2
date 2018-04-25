@@ -163,13 +163,18 @@ bool DMC::step(){
 	unsigned long tag = current.getAddress()%this->tag_max;
 	if(this->lines[index].valid && this->lines[index].tag==tag){
 		if(DEBUG){
-			cout << "Hit: ";
+			cout << "Hit:\t" << current.getAddress() << "\t";
 			this->lines[index].printLine();
 			cout << endl;
 		}
 		this->tracker.addHit();
 		return true;
 	}
+	if(DEBUG){
+			cout << "Miss:\t" << current.getAddress() << "\t";
+			this->lines[index].printLine();
+			cout << endl;
+		}
 	this->tracker.addMiss();
 	this->lines[index].tag=tag;
 	this->lines[index].valid=true;
