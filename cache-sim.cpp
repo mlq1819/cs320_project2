@@ -145,11 +145,11 @@ void DMC::setSizesAndMaxes(){
 	}
 	this->offset_size=(4-this->index_size%4)%4;
 	this->offset_max=1;
-	for(unsigned int i=1; i<this->offset_size; i++)
+	for(unsigned int i=0; i<=this->offset_size; i++)
 		this->offset_max*=2;
 	this->tag_size=32-this->index_size-this->offset_size;
 	this->tag_max=1;
-	for(unsigned int i=1; i<this->tag_size; i++)
+	for(unsigned int i=1; i<=this->tag_size; i++)
 		this->tag_max=this->tag_max*2;
 }
 
