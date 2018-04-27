@@ -185,7 +185,7 @@ bool DMC::step(){
 			cout << "\t";
 			this->fdb_looper++;
 			if(this->fdb_looper%4==0){
-				if(this->fdb_loop==16){
+				if(this->fdb_looper==16){
 					this->fdb_looper=0;
 					cout << endl;
 				} else
@@ -201,7 +201,7 @@ bool DMC::step(){
 			cout << "\t";
 			this->fdb_looper++;
 			if(this->fdb_looper%4==0){
-				if(this->fdb_loop==16){
+				if(this->fdb_looper==16){
 					this->fdb_looper=0;
 					cout << endl;
 				} else
