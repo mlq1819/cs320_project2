@@ -112,12 +112,12 @@ bool FileReader::next(){
 }
 
 void CacheLine::printLine(){
-	cout << "0x" << hex << this->address << ":";
+	cout << "0x" << hex << this->address << ":" << dec;
 	if(this->valid)
 		cout << "1-";
 	else
 		cout << "0-";
-	cout << "0x" << hex << this->tag << "-0x" << hex << this->index;
+	cout << "0x" << hex << this->tag << "-0x" << hex << this->index << dec;
 }
 
 DMC::DMC(FileReader * reader, unsigned int cache_size){
@@ -186,10 +186,10 @@ bool DMC::step(){
 	Line current = this->reader->current();
 	unsigned long index = current.getAddress()%this->index_max;
 	if(DEBUG && index>=this->index_max)
-		cout << "WARNING: index out of bounds at 0x" << hex << current.getAddress() << ": 0x" <<  hex << index << ">=0x" << hex << this->index_max << endl;
+		cout << "WARNING: index out of bounds at 0x" << hex << current.getAddress() << ": 0x" <<  hex << index << ">=0x" << hex << this->index_max << dec << endl;
 	unsigned long tag = (current.getAddress()/this->index_max)*this->tag_offset_max;
 	if(DEBUG && index>=this->index_max)
-		cout << "WARNING: tag out of bounds at 0x" << hex << current.getAddress() << ": 0x" << hex << tag << ">=0x" << hex << this->tag_max << endl;
+		cout << "WARNING: tag out of bounds at 0x" << hex << current.getAddress() << ": 0x" << hex << tag << ">=0x" << hex << this->tag_max  << dec<< endl;
 	/*if(current.isStore()){
 		this->lines[index].tag=tag;
 		this->lines[index].valid=true;
@@ -210,7 +210,7 @@ bool DMC::step(){
 	} else {*/
 		if(this->lines[index].valid && this->lines[index].tag==tag){
 			if(FINEDEB){
-				cout << "Hit:  \t0x" << hex << current.getAddress() << "->";
+				cout << "Hit:  \t0x" << hex << current.getAddress() << "->" << dec;
 				this->lines[index].printLine();
 				cout << "\t";
 				this->fdb_looper++;
@@ -233,7 +233,7 @@ bool DMC::step(){
 			return true;
 		}
 		if(FINEDEB){
-			cout << "Miss: \t0x" << hex << current.getAddress() << "->";
+			cout << "Miss: \t0x" << hex << current.getAddress() << "->" << dec;
 			this->lines[index].printLine();
 			cout << "\t";
 			this->fdb_looper++;
@@ -250,7 +250,7 @@ bool DMC::step(){
 					this->fdb_looper=0;
 					cout << endl;
 				}
-				cout << "BAD MISS: \t0x" << hex << current.getAddress() << "==0x" << hex << this->lines[index].address << endl;
+				cout << "BAD MISS: \t0x" << hex << current.getAddress() << "==0x" << hex << this->lines[index].address << dec << endl;
 			}
 		this->tracker.addMiss();
 		this->lines[index].tag=tag;
@@ -272,11 +272,11 @@ void DMC::printCache(){
 }
 
 void DMC::printVars(){
-	cout << "cache_size: \t" << dec << this->cache_size << "\tkB\t| numLines():\t" << dec << this->numLines() << "\tlines\t" << endl;
+	cout << "cache_size: \t" << dec << this->cache_size << "\tkB\t| numLines():\t" << dec << this->numLines() << "\tlines\t" << dec << endl;
 	cout << "--------------------------------+---------------------------" << endl;
-	cout << "line_size:  \t" << dec << this->line_size << "\tbits\t| maxAddress:\t0x" << hex << this->maxAddress() << endl;
-	cout << "index_size: \t" << dec << this->index_size << "\tbits\t| index_max: \t0x" << hex << this->index_max << endl;
-	cout << "tag_size:   \t" << dec << this->tag_size << "\tbits\t| tag_max:   \t0x" << hex << this->tag_max << endl;
-	cout << "IDXOFFSIZE: \t" << dec << this->index_offset_size << "\tbits\t| IDXOFFMAX: \t0x" << hex << this->index_offset_max << endl;
-	cout << "TAGOFFSIZE: \t" << dec << this->tag_offset_size << "\tbits\t| TAGOFFMAX: \t0x" << hex << this->tag_offset_max << endl;
+	cout << "line_size:  \t" << dec << this->line_size << "\tbits\t| maxAddress:\t0x" << hex << this->maxAddress() << dec << endl;
+	cout << "index_size: \t" << dec << this->index_size << "\tbits\t| index_max: \t0x" << hex << this->index_max << dec << endl;
+	cout << "tag_size:   \t" << dec << this->tag_size << "\tbits\t| tag_max:   \t0x" << hex << this->tag_max << dec << endl;
+	cout << "IDXOFFSIZE: \t" << dec << this->index_offset_size << "\tbits\t| IDXOFFMAX: \t0x" << hex << this->index_offset_max << dec << endl;
+	cout << "TAGOFFSIZE: \t" << dec << this->tag_offset_size << "\tbits\t| TAGOFFMAX: \t0x" << hex << this->tag_offset_max << dec << endl;
 }
