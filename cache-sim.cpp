@@ -178,7 +178,7 @@ bool DMC::step(){
 	unsigned long tag = current.getAddress()/this->index_max;
 	if(DEBUG && index>=this->index_max)
 		cout << "WARNING: tag out of bounds at " << current.getAddress() << ":" << tag << ">=" << this->tag_max << endl;
-	if(this->lines[index].isStore()){
+	if(current.isStore()){
 		this->lines[index].tag=tag;
 		this->lines[index].valid=true;
 		this->tracker.addMiss();
