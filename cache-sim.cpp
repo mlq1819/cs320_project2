@@ -212,13 +212,6 @@ bool DMC::step(){
 						cout << "\n";
 				}
 			}
-			if(DEBUG && this->lines[index].address!=current.getAddress()){
-				if(this->fdb_looper%4!=0){
-					this->fdb_looper=0;
-					cout << endl;
-				}
-				cout << "BAD HIT: \t0x" << hex << current.getAddress() << "!=0x" << hex << this->lines[index].address << endl;
-			}
 			this->tracker.addHit();
 			return true;
 		}
@@ -235,13 +228,6 @@ bool DMC::step(){
 					cout << "\n";
 			}
 		}
-		if(DEBUG && this->lines[index].valid && this->lines[index].address==current.getAddress()){
-				if(this->fdb_looper%4!=0){
-					this->fdb_looper=0;
-					cout << endl;
-				}
-				cout << "BAD MISS: \t0x" << hex << current.getAddress() << "==0x" << hex << this->lines[index].address << dec << endl;
-			}
 		this->tracker.addMiss();
 		this->lines[index].tag=tag;
 		this->lines[index].address=current.getAddress(); //used for debugging
