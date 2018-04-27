@@ -189,7 +189,7 @@ bool DMC::step(){
 	unsigned long index = (current.getAddress()>>5)%this->index_max;
 	if(DEBUG && index>=this->index_max)
 		cout << "WARNING: index out of bounds at 0x" << hex << current.getAddress() << ": 0x" <<  hex << index << ">=0x" << hex << this->index_max << dec << endl;
-	unsigned long tag = ((current.getAddress()>>5)/this->index_max);
+	unsigned long tag = ((current.getAddress()>>5)>>this->index_size);
 	/*if(DEBUG && index>=this->index_max)
 		cout << "WARNING: tag out of bounds at 0x" << hex << current.getAddress() << ": 0x" << hex << tag << ">=0x" << hex << this->tag_max  << dec<< endl;
 	*/
