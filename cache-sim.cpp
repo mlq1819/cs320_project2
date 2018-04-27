@@ -2,7 +2,7 @@
 #define FORCE false
 #define OUTPUT true
 #define DEBUG true
-#define FINEDEB false
+#define FINEDEB true
 #include <vector>
 
 using namespace std;
@@ -53,7 +53,10 @@ int main(int argc, char *argv[]){
 		cout << "Outputting to " << argv[2] << endl;
 	
 	unsigned int sizes[] = {1, 4, 16, 32};
-	for(int i=0; i<4; i++){
+	int max = 4;
+	if(DEINDEB)
+		max=1;
+	for(int i=0; i<max; i++){
 		DMC dmc = DMC(&reader, sizes[i]);
 		cout << "Direct-Mapped Cache: " << sizes[i] << "kB" << endl;
 		dmc.run();
