@@ -182,7 +182,7 @@ bool DMC::step(){
 		if(FINEDEB){
 			cout << "Hit:\t" << current.getAddress() << ":\t";
 			this->lines[index].printLine();
-			cout << "\t"
+			cout << "\t";
 			this->fdb_looper++;
 			if(this->fdb_looper==3){
 				this->fdb_looper=0;
@@ -195,7 +195,7 @@ bool DMC::step(){
 	if(FINEDEB){
 			cout << "Miss:\t" << current.getAddress() << ":\t";
 			this->lines[index].printLine();
-			cout << "\t"
+			cout << "\t";
 			this->fdb_looper++;
 			if(this->fdb_looper==3){
 				this->fdb_looper=0;
