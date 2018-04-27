@@ -1,7 +1,7 @@
 #include "cache-sim.h"
 #define FORCE false
 #define OUTPUT true
-#define DEBUG true
+#define DEBUG false
 #define FINEDEB false
 #include <vector>
 
@@ -186,14 +186,15 @@ double DMC::run(){
 
 bool DMC::step(){
 	Line current = this->reader->current();
-	unsigned long index = current.getAddress()%this->index_max;
+	unsigned long index = (current.getAddress()>>5)%this->index_max;
 	if(DEBUG && index>=this->index_max)
 		cout << "WARNING: index out of bounds at 0x" << hex << current.getAddress() << ": 0x" <<  hex << index << ">=0x" << hex << this->index_max << dec << endl;
-	unsigned long tag = (current.getAddress()/this->index_max)*this->tag_offset_max;
+	//unsigned long tag = ((current.getAddress())/this->index_max)*this->tag_offset_max;
 	if(DEBUG && index>=this->index_max)
 		cout << "WARNING: tag out of bounds at 0x" << hex << current.getAddress() << ": 0x" << hex << tag << ">=0x" << hex << this->tag_max  << dec<< endl;
 	if(DEBUG){
-		unsigned long calculated_address=(tag*(this->maxAddress()/this->tag_max)) + index;
+		//unsigned long calculated_address=(tag*(this->maxAddress()/this->tag_max)) + index;
+		unsigned long calculated_address=index;
 		if(current.getAddress()!=calculated_address){
 			if(this->fdb_looper%4!=0){
 				this->fdb_looper=0;
@@ -202,25 +203,55 @@ bool DMC::step(){
 			cout << "WARNING: calculated address (0x" << hex << calculated_address << ") not equal to actual (0x" << hex << current.getAddress() << ")" << dec << endl;
 		}
 	}
-	/*if(current.isStore()){
-		this->lines[index].tag=tag;
-		this->lines[index].valid=true;
-		this->tracker.addMiss();
+	if(this->lines[index].valid){
+			if(FINEDEB){
+				cout << "Hit:  \t0x" << hex << current.getAddress() << "->" << dec;
+				this->lines[index].printLine();
+				cout << "\t";
+				this->fdb_looper++;
+				if(this->fdb_looper%4==0){
+					if(this->fdb_looper==20){
+						this->fdb_looper=0;
+						cout << endl;
+					} else
+						cout << "\n";
+				}
+			}
+			if(DEBUG && this->lines[index].address!=current.getAddress()){
+				if(this->fdb_looper%4!=0){
+					this->fdb_looper=0;
+					cout << endl;
+				}
+				cout << "BAD HIT: \t0x" << hex << current.getAddress() << "!=0x" << hex << this->lines[index].address << endl;
+			}
+			this->tracker.addHit();
+			return true;
+		}
 		if(FINEDEB){
-			cout << "Store:\t" << current.getAddress() << "->";
+			cout << "Miss: \t0x" << hex << current.getAddress() << "->" << dec;
 			this->lines[index].printLine();
 			cout << "\t";
 			this->fdb_looper++;
-			if(this->fdb_looper%5==0){
-				if(this->fdb_looper==25){
+			if(this->fdb_looper%4==0){
+				if(this->fdb_looper==20){
 					this->fdb_looper=0;
 					cout << endl;
 				} else
 					cout << "\n";
 			}
 		}
-	} else {*/
-		if(this->lines[index].valid && this->lines[index].tag==tag){
+		if(DEBUG && this->lines[index].valid && this->lines[index].address==current.getAddress()){
+				if(this->fdb_looper%4!=0){
+					this->fdb_looper=0;
+					cout << endl;
+				}
+				cout << "BAD MISS: \t0x" << hex << current.getAddress() << "==0x" << hex << this->lines[index].address << dec << endl;
+			}
+		this->tracker.addMiss();
+		this->lines[index].address=current.getAddress(); //used for debugging
+		this->lines[index].valid=true;
+	}
+	/*if(this->lines[index].valid && this->lines[index].tag==tag){
 			if(FINEDEB){
 				cout << "Hit:  \t0x" << hex << current.getAddress() << "->" << dec;
 				this->lines[index].printLine();
@@ -268,7 +299,7 @@ bool DMC::step(){
 		this->lines[index].tag=tag;
 		this->lines[index].address=current.getAddress(); //used for debugging
 		this->lines[index].valid=true;
-	//}
+	//}*/
 	return false;
 }
 
