@@ -272,11 +272,11 @@ void DMC::printCache(){
 }
 
 void DMC::printVars(){
-	cout << "cache_size: \t" << this->cache_size << "\tkB\t| numLines():\t" << this->numLines() << "\tlines\t" << endl;
+	cout << "cache_size: \t" << dec << this->cache_size << "\tkB\t| numLines():\t" << dec << this->numLines() << "\tlines\t" << endl;
 	cout << "--------------------------------+---------------------------" << endl;
-	cout << "line_size:  \t" << this->line_size << "\tbits\t| maxAddress:\t0x" << hex << this->maxAddress() << endl;
-	cout << "index_size: \t" << this->index_size << "\tbits\t| index_max: \t0x" << hex << this->index_max << endl;
-	cout << "tag_size:   \t" << this->tag_size << "\tbits\t| tag_max:   \t0x" << hex << this->tag_max << endl;
-	cout << "IDXOFFSIZE: \t" << this->index_offset_size << "\tbits\t| IDXOFFMAX: \t0x" << hex << this->index_offset_max << endl;
-	cout << "TAGOFFSIZE: \t" << this->tag_offset_size << "\tbits\t| TAGOFFMAX: \t0x" << hex << this->tag_offset_max << endl;
+	cout << "line_size:  \t" << dec << this->line_size << "\tbits\t| maxAddress:\t0x" << hex << this->maxAddress() << endl;
+	cout << "index_size: \t" << dec << this->index_size << "\tbits\t| index_max: \t0x" << hex << this->index_max << endl;
+	cout << "tag_size:   \t" << dec << this->tag_size << "\tbits\t| tag_max:   \t0x" << hex << this->tag_max << endl;
+	cout << "IDXOFFSIZE: \t" << dec << this->index_offset_size << "\tbits\t| IDXOFFMAX: \t0x" << hex << this->index_offset_max << endl;
+	cout << "TAGOFFSIZE: \t" << dec << this->tag_offset_size << "\tbits\t| TAGOFFMAX: \t0x" << hex << this->tag_offset_max << endl;
 }
