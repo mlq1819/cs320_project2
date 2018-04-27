@@ -168,8 +168,12 @@ double DMC::run(){
 bool DMC::step(){
 	Line current = this->reader->current();
 	//currently, there is an issue with index, where it is not evaluating properly, causing significantly more misses than it should be
-	unsigned long index = (current.getAddress()/this->tag_max)%this->index_max;
+	unsigned long index = (current.getAddress()/this->tag_max);
+	if(DEBUG && index>=this->index_max)
+		cout << "WARNING: index out of bounds at " << current.getAddress() << ":" << index << ">=" << this->index_max << endl;
 	unsigned long tag = current.getAddress()%this->tag_max;
+	if(DEBUG && index>=this->index_max)
+		cout << "WARNING: tag out of bounds at " << current.getAddress() << ":" << tag << ">=" << this->tag_max << endl;
 	if(this->lines[index].valid && this->lines[index].tag==tag){
 		if(FINEDEB){
 			cout << "Hit:\t" << current.getAddress() << ":\t";
