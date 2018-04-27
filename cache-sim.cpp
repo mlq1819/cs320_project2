@@ -190,8 +190,9 @@ bool DMC::step(){
 	if(DEBUG && index>=this->index_max)
 		cout << "WARNING: index out of bounds at 0x" << hex << current.getAddress() << ": 0x" <<  hex << index << ">=0x" << hex << this->index_max << dec << endl;
 	//unsigned long tag = ((current.getAddress())/this->index_max)*this->tag_offset_max;
-	if(DEBUG && index>=this->index_max)
+	/*if(DEBUG && index>=this->index_max)
 		cout << "WARNING: tag out of bounds at 0x" << hex << current.getAddress() << ": 0x" << hex << tag << ">=0x" << hex << this->tag_max  << dec<< endl;
+	*/
 	if(DEBUG){
 		//unsigned long calculated_address=(tag*(this->maxAddress()/this->tag_max)) + index;
 		unsigned long calculated_address=index;
@@ -241,16 +242,15 @@ bool DMC::step(){
 			}
 		}
 		if(DEBUG && this->lines[index].valid && this->lines[index].address==current.getAddress()){
-				if(this->fdb_looper%4!=0){
-					this->fdb_looper=0;
-					cout << endl;
-				}
-				cout << "BAD MISS: \t0x" << hex << current.getAddress() << "==0x" << hex << this->lines[index].address << dec << endl;
+			if(this->fdb_looper%4!=0){
+				this->fdb_looper=0;
+				cout << endl;
 			}
-		this->tracker.addMiss();
-		this->lines[index].address=current.getAddress(); //used for debugging
-		this->lines[index].valid=true;
-	}
+			cout << "BAD MISS: \t0x" << hex << current.getAddress() << "==0x" << hex << this->lines[index].address << dec << endl;
+		}
+	this->tracker.addMiss();
+	this->lines[index].address=current.getAddress(); //used for debugging
+	this->lines[index].valid=true;
 	/*if(this->lines[index].valid && this->lines[index].tag==tag){
 			if(FINEDEB){
 				cout << "Hit:  \t0x" << hex << current.getAddress() << "->" << dec;
