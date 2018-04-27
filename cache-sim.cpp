@@ -253,6 +253,6 @@ void DMC::printVars(){
 	cout << "line_size:  \t" << this->line_size << "\tbits\t| maxAddress:\t" << this->maxAddress() << endl;
 	cout << "index_size: \t" << this->index_size << "\tbits\t| index_max: \t" << this->index_max << endl;
 	cout << "tag_size:   \t" << this->tag_size << "\tbits\t| tag_max:   \t" << this->tag_max << endl;
-	cout << "offset_size:\t" << this->offset_size << "\tbits\t| offset_max:\t" << this->offset_max << endl;
+	//cout << "offset_size:\t" << this->offset_size << "\tbits\t| offset_max:\t" << this->offset_max << endl;
 	cout << "numLines(): \t" << this->numLines() << "\tlines\t|\n\n" << endl;
 }
