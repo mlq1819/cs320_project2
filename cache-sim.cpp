@@ -243,6 +243,7 @@ void DMC::printCache(){
 		if(i%24==23)
 			cout << endl;
 	}
+	cout << endl;
 }
 
 void DMC::printVars(){
