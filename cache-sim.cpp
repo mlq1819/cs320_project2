@@ -236,10 +236,9 @@ bool DMC::step(){
 void DMC::printCache(){
 	unsigned long num_lines=this->numLines();
 	for(unsigned long i=0; i<num_lines; i++){
-		cout << i << ": ";
 		this->lines[i].printLine();
 		cout << "; \t";
-		if(i%16==15)
+		if(i%20==19)
 			cout << endl;
 	}
 	cout <<endl;
