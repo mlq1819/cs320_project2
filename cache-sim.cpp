@@ -178,9 +178,12 @@ bool DMC::step(){
 	unsigned long tag = current.getAddress()/this->index_max;
 	if(DEBUG && index>=this->index_max)
 		cout << "WARNING: tag out of bounds at " << current.getAddress() << ":" << tag << ">=" << this->tag_max << endl;
-	if(this->lines[index].valid && this->lines[index].tag==tag){
+	if(this->lines[index].isStore()){
+		this->lines[index].tag=tag;
+		this->lines[index].valid=true;
+		this->tracker.addMiss();
 		if(FINEDEB){
-			cout << "Hit:\t" << current.getAddress() << ":\t";
+			cout << "Store:\t" << current.getAddress() << ":\t";
 			this->lines[index].printLine();
 			cout << "\t";
 			this->fdb_looper++;
@@ -192,27 +195,42 @@ bool DMC::step(){
 					cout << "\n";
 			}
 		}
-		this->tracker.addHit();
-		return true;
+	} else {
+		if(this->lines[index].valid && this->lines[index].tag==tag){
+			if(FINEDEB){
+				cout << "Hit:  \t" << current.getAddress() << ":\t";
+				this->lines[index].printLine();
+				cout << "\t";
+				this->fdb_looper++;
+				if(this->fdb_looper%4==0){
+					if(this->fdb_looper==16){
+						this->fdb_looper=0;
+						cout << endl;
+					} else
+						cout << "\n";
+				}
+			}
+			this->tracker.addHit();
+			return true;
+		}
+		if(FINEDEB){
+				cout << "Miss: \t" << current.getAddress() << ":\t";
+				this->lines[index].printLine();
+				cout << "\t";
+				this->fdb_looper++;
+				if(this->fdb_looper%4==0){
+					if(this->fdb_looper==16){
+						this->fdb_looper=0;
+						cout << endl;
+					} else
+						cout << "\n";
+				}
+			}
+		this->tracker.addMiss();
+		this->lines[index].tag=tag;
+		this->lines[index].valid=true;
 	}
-	if(FINEDEB){
-			cout << "Miss:\t" << current.getAddress() << ":\t";
-			this->lines[index].printLine();
-			cout << "\t";
-			this->fdb_looper++;
-			if(this->fdb_looper%4==0){
-				if(this->fdb_looper==16){
-					this->fdb_looper=0;
-					cout << endl;
-				} else
-					cout << "\n";
-			}
-		}
-	this->tracker.addMiss();
-	this->lines[index].tag=tag;
-	this->lines[index].valid=true;
 	return false;
-	
 }
 
 void DMC::printCache(){
