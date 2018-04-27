@@ -208,8 +208,8 @@ bool DMC::step(){
 				this->lines[index].printLine();
 				cout << "\t";
 				this->fdb_looper++;
-				if(this->fdb_looper%5==0){
-					if(this->fdb_looper==25){
+				if(this->fdb_looper%4==0){
+					if(this->fdb_looper==20){
 						this->fdb_looper=0;
 						cout << endl;
 					} else
@@ -224,8 +224,8 @@ bool DMC::step(){
 			this->lines[index].printLine();
 			cout << "\t";
 			this->fdb_looper++;
-			if(this->fdb_looper%5==0){
-				if(this->fdb_looper==25){
+			if(this->fdb_looper%4==0){
+				if(this->fdb_looper==20){
 					this->fdb_looper=0;
 					cout << endl;
 				} else
