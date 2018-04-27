@@ -127,6 +127,7 @@ DMC::DMC(FileReader * reader, unsigned int cache_size){
 	this->tag_size=1;
 	this->index_max=1;
 	this->index_size=1;
+	this->fdb_looper=0;
 	this->setSizesAndMaxes();
 	this->lines=vector<CacheLine>();
 	for(unsigned int i=0; i<this->index_max; i++)
@@ -181,7 +182,12 @@ bool DMC::step(){
 		if(FINEDEB){
 			cout << "Hit:\t" << current.getAddress() << ":\t";
 			this->lines[index].printLine();
-			cout << endl;
+			cout << "\t"
+			this->fdb_looper++;
+			if(this->fdb_looper==3){
+				this->fdb_looper=0;
+				cout << endl;
+			}
 		}
 		this->tracker.addHit();
 		return true;
@@ -189,7 +195,12 @@ bool DMC::step(){
 	if(FINEDEB){
 			cout << "Miss:\t" << current.getAddress() << ":\t";
 			this->lines[index].printLine();
-			cout << endl;
+			cout << "\t"
+			this->fdb_looper++;
+			if(this->fdb_looper==3){
+				this->fdb_looper=0;
+				cout << endl;
+			}
 		}
 	this->tracker.addMiss();
 	this->lines[index].tag=tag;
