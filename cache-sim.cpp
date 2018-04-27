@@ -2,7 +2,7 @@
 #define FORCE false
 #define OUTPUT true
 #define DEBUG true
-#define FINEDEB false
+#define FINEDEB true
 #include <vector>
 
 using namespace std;
@@ -245,7 +245,7 @@ void DMC::printCache(){
 	for(unsigned long i=0; i<num_lines; i++){
 		this->lines[i].printLine();
 		cout << "; \t";
-		if(i%24==23)
+		if(i%16==15)
 			cout << endl;
 	}
 	cout << endl;
