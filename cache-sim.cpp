@@ -112,12 +112,12 @@ bool FileReader::next(){
 }
 
 void CacheLine::printLine(){
-	cout << hex << this->address << ":";
+	cout << "0x" << hex << this->address << ":";
 	if(this->valid)
 		cout << "1-";
 	else
 		cout << "0-";
-	cout << hex << this->tag << "-" << hex << this->index;
+	cout << "0x" << hex << this->tag << "-0x" << hex << this->index;
 }
 
 DMC::DMC(FileReader * reader, unsigned int cache_size){
@@ -180,10 +180,10 @@ bool DMC::step(){
 	Line current = this->reader->current();
 	unsigned long index = current.getAddress()%this->index_max;
 	if(DEBUG && index>=this->index_max)
-		cout << "WARNING: index out of bounds at " << hex << current.getAddress() << ": " <<  hex << index << ">=" << hex << this->index_max << endl;
+		cout << "WARNING: index out of bounds at 0x" << hex << current.getAddress() << ": 0x" <<  hex << index << ">=0x" << hex << this->index_max << endl;
 	unsigned long tag = (current.getAddress()/this->index_max)/this->offset_max;
 	if(DEBUG && index>=this->index_max)
-		cout << "WARNING: tag out of bounds at " << hex << current.getAddress() << ": " << hex << tag << ">=" << hex << this->tag_max << endl;
+		cout << "WARNING: tag out of bounds at 0x" << hex << current.getAddress() << ": 0x" << hex << tag << ">=0x" << hex << this->tag_max << endl;
 	/*if(current.isStore()){
 		this->lines[index].tag=tag;
 		this->lines[index].valid=true;
@@ -204,7 +204,7 @@ bool DMC::step(){
 	} else {*/
 		if(this->lines[index].valid && this->lines[index].tag==tag){
 			if(FINEDEB){
-				cout << "Hit:  \t" << hex << current.getAddress() << "->";
+				cout << "Hit:  \t0x" << hex << current.getAddress() << "->";
 				this->lines[index].printLine();
 				cout << "\t";
 				this->fdb_looper++;
@@ -220,7 +220,7 @@ bool DMC::step(){
 			return true;
 		}
 		if(FINEDEB){
-			cout << "Miss: \t" << hex << current.getAddress() << "->";
+			cout << "Miss: \t0x" << hex << current.getAddress() << "->";
 			this->lines[index].printLine();
 			cout << "\t";
 			this->fdb_looper++;
@@ -254,8 +254,8 @@ void DMC::printCache(){
 void DMC::printVars(){
 	cout << "cache_size: \t" << this->cache_size << "\tkB\t| numLines():\t" << this->numLines() << "\tlines\t" << endl;
 	cout << "--------------------------------+---------------------------" << endl;
-	cout << "line_size:  \t" << this->line_size << "\tbits\t| maxAddress:\t" << hex << this->maxAddress() << endl;
-	cout << "index_size: \t" << this->index_size << "\tbits\t| index_max: \t" << hex << this->index_max << endl;
-	cout << "tag_size:   \t" << this->tag_size << "\tbits\t| tag_max:   \t" << hex << this->tag_max << endl;
-	cout << "offset_size:\t" << this->offset_size << "\tbits\t| offset_max:\t" << hex << this->offset_max << endl;
+	cout << "line_size:  \t" << this->line_size << "\tbits\t| maxAddress:\t0x" << hex << this->maxAddress() << endl;
+	cout << "index_size: \t" << this->index_size << "\tbits\t| index_max: \t0x" << hex << this->index_max << endl;
+	cout << "tag_size:   \t" << this->tag_size << "\tbits\t| tag_max:   \t0x" << hex << this->tag_max << endl;
+	cout << "offset_size:\t" << this->offset_size << "\tbits\t| offset_max:\t0x" << hex << this->offset_max << endl;
 }
