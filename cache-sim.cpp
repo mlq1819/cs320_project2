@@ -2,7 +2,7 @@
 #define FORCE false
 #define OUTPUT true
 #define DEBUG true
-#define FINEDEB true
+#define FINEDEB false
 #include <vector>
 
 using namespace std;
@@ -190,6 +190,16 @@ bool DMC::step(){
 	unsigned long tag = (current.getAddress()/this->index_max)*this->tag_offset_max;
 	if(DEBUG && index>=this->index_max)
 		cout << "WARNING: tag out of bounds at 0x" << hex << current.getAddress() << ": 0x" << hex << tag << ">=0x" << hex << this->tag_max  << dec<< endl;
+	if(DEBUG){
+		unsigned long calculated_address=tag*16+index;
+		if(current.getAddress()!=calculated_address){
+			if(this->fdb_looper%4!=0){
+				this->fdb_looper=0;
+				cout << endl;
+			}
+			cout << "WARNING: calculated address (0x" << hex << calculated_address << ") not equal to actual (0x" << hex << current.getAddress() << ")" << dec << endl;
+		}
+	}
 	/*if(current.isStore()){
 		this->lines[index].tag=tag;
 		this->lines[index].valid=true;
