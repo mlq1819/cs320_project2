@@ -143,10 +143,7 @@ void DMC::setSizesAndMaxes(){
 		this->index_size++;
 		this->index_max=this->index_max*2;
 	}
-	this->offset_max=0;
-	this->offset_size=this->index_size/4;
-	if(this->index_size%4!=0)
-		this->offset_size++;
+	this->offset_size=(4-this->index_size%4)%4;
 	this->offset_max=1;
 	for(unsigned int i=1; i<this->offset_size; i++)
 		this->offset_max*=2;
