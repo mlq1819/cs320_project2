@@ -144,18 +144,20 @@ void DMC::setSizesAndMaxes(){
 		this->index_size++;
 		this->index_max=this->index_max*2;
 	}
+	this->tag_size=32-this->index_size;
+	this->tag_max=1;
+	for(unsigned int i=1; i<=this->tag_size; i++)
+		this->tag_max=this->tag_max*2;
 	this->index_offset_size=(4-this->index_size%4)%4;
 	this->index_offset_max=1;
 	for(unsigned int i=1; i<=this->index_offset_size; i++)
 		this->index_offset_max*=2;
 	this->tag_offset_size=(4-this->index_offset_size)%4;
 	this->tag_offset_max=1;
-	for(unsigned int i=1; i<=this->tag_offset_size; i++)
+	for(unsigned int i=1; i<=this->tag_offset_size; i++){
 		this->tag_offset_max*=2;
-	this->tag_size=32-this->index_size;
-	this->tag_max=1;
-	for(unsigned int i=1; i<=this->tag_size; i++)
-		this->tag_max=this->tag_max*2;
+		this->tag_max*=2;
+	}
 }
 
 unsigned long DMC::maxAddress() const {
