@@ -183,7 +183,7 @@ bool DMC::step(){
 		this->lines[index].valid=true;
 		this->tracker.addMiss();
 		if(FINEDEB){
-			cout << "Store:\t" << current.getAddress() << ":\t";
+			cout << "Store:\t" << current.getAddress() << "->";
 			this->lines[index].printLine();
 			cout << "\t";
 			this->fdb_looper++;
@@ -198,7 +198,7 @@ bool DMC::step(){
 	} else {
 		if(this->lines[index].valid && this->lines[index].tag==tag){
 			if(FINEDEB){
-				cout << "Hit:  \t" << current.getAddress() << ":\t";
+				cout << "Hit:  \t" << current.getAddress() << "->";
 				this->lines[index].printLine();
 				cout << "\t";
 				this->fdb_looper++;
@@ -214,7 +214,7 @@ bool DMC::step(){
 			return true;
 		}
 		if(FINEDEB){
-				cout << "Miss: \t" << current.getAddress() << ":\t";
+				cout << "Miss: \t" << current.getAddress() << "->";
 				this->lines[index].printLine();
 				cout << "\t";
 				this->fdb_looper++;
