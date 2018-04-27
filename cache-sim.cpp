@@ -191,7 +191,7 @@ bool DMC::step(){
 	if(DEBUG && index>=this->index_max)
 		cout << "WARNING: tag out of bounds at 0x" << hex << current.getAddress() << ": 0x" << hex << tag << ">=0x" << hex << this->tag_max  << dec<< endl;
 	if(DEBUG){
-		unsigned long calculated_address=tag*(16*((this->index_size+3)%4))+index;
+		unsigned long calculated_address=tag*(16*((this->index_size+3)/4))+index;
 		if(current.getAddress()!=calculated_address){
 			if(this->fdb_looper%4!=0){
 				this->fdb_looper=0;
