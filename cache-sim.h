@@ -63,11 +63,12 @@ class CacheLine{
 	private:
 		unsigned long index;
 	public:
-		CacheLine(){this->index=0; this->valid=false; this->tag=0;};
-		CacheLine(unsigned long index){this->index=index; this->valid=false; this->tag=0;};
+		CacheLine(){this->index=0; this->valid=false; this->tag=0; this->address=0;};
+		CacheLine(unsigned long index){this->index=index; this->valid=false; this->tag=0; this->address=0;};
 		CacheLine(const CacheLine & o){this->index=o.getIndex(); this->valid=o.valid; this->tag=o.tag;};
 		bool valid;
 		unsigned long tag;
+		unsigned long address;
 		unsigned long getIndex() const {return this->index;};
 		void printLine();
 };
