@@ -274,7 +274,7 @@ void DMC::printCache(){
 	unsigned long num_lines=this->numLines();
 	for(unsigned long i=0; i<num_lines; i++){
 		this->lines[i].printLine();
-		cout << "; \t";
+		cout << ";   \t";
 		if(i%16==15)
 			cout << endl;
 	}
