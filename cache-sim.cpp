@@ -184,7 +184,7 @@ bool DMC::step(){
 			this->lines[index].printLine();
 			cout << "\t";
 			this->fdb_looper++;
-			if(this->fdb_looper==3){
+			if(this->fdb_looper==4){
 				this->fdb_looper=0;
 				cout << endl;
 			}
@@ -197,7 +197,7 @@ bool DMC::step(){
 			this->lines[index].printLine();
 			cout << "\t";
 			this->fdb_looper++;
-			if(this->fdb_looper==3){
+			if(this->fdb_looper==4){
 				this->fdb_looper=0;
 				cout << endl;
 			}
