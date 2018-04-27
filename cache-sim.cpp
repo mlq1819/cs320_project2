@@ -150,19 +150,10 @@ unsigned long DMC::maxAddress() const {
 }
 
 double DMC::run(){
-	if(DEBUG){
-		this->printCache();
-		cout << endl;
-	}
 	if(!this->reader->isRead())
 		this->reader->readFile();
 	else
 		this->reader->start();
-	if(DEBUG){
-		cout << endl;
-		this->printCache();
-		cout << endl;
-	}
 	do{
 		this->step();
 	} while (this->reader->next());
