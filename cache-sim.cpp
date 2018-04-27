@@ -79,7 +79,7 @@ Line::Line(bool isStore, unsigned long address){
 
 Line::Line(string str){
 	this->is_store=(str[0]=='S');
-	this->address=stol(str.substr(4,12), 0, 16);
+	this->address=stoul(str.substr(4,12), 0, 16);
 }
 
 FileReader::FileReader(ifstream * file){
