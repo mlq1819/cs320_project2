@@ -54,7 +54,7 @@ int main(int argc, char *argv[]){
 	
 	unsigned int sizes[] = {1, 4, 16, 32};
 	int max = 4;
-	if(DEINDEB)
+	if(FINEDEB)
 		max=1;
 	for(int i=0; i<max; i++){
 		DMC dmc = DMC(&reader, sizes[i]);
