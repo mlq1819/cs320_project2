@@ -81,7 +81,7 @@ class DMC{
 		unsigned int index_size;
 		unsigned int index_max;
 		unsigned int tag_max;
-		CacheLine * lines;
+		std::vector<CacheLine> lines;
 		Tracker tracker;
 		void setSizesAndMaxes();
 		unsigned long maxAddress() const;

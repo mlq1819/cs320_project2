@@ -3,6 +3,7 @@
 #define OUTPUT true
 #define DEBUG true
 #define FINEDEB false
+#include <vector>
 
 using namespace std;
 
@@ -124,10 +125,10 @@ DMC::DMC(FileReader * reader, unsigned int cache_size){
 	this->index_max=1;
 	this->index_size=1;
 	this->setSizesAndMaxes();
-	CacheLine temp_lines[this->index_max];
+	this->lines=vector<CacheLine>();
 	for(unsigned int i=0; i<this->index_max; i++)
-		this->lines[i]=CacheLine(i);
-	this->lines = temp_lines;
+		this->lines.push_back(CacheLine(i));
+	this->lines.shrink_to_fit();
 }
 
 void DMC::setSizesAndMaxes(){
