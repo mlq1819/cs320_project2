@@ -81,8 +81,8 @@ class DMC{
 		unsigned int index_size;
 		unsigned int index_max;
 		unsigned int tag_max;
-		/*unsigned int offset_size;
-		unsigned int offset_max;*/
+		unsigned int offset_size;
+		unsigned int offset_max;
 		unsigned int fdb_looper;
 		std::vector<CacheLine> lines;
 		Tracker tracker;
