@@ -143,10 +143,10 @@ void DMC::setSizesAndMaxes(){
 		this->index_size++;
 		this->index_max=this->index_max*2;
 	}
-	this->offset_size=(4-this->index_size%4)%4;
+	/*this->offset_size=(4-this->index_size%4)%4;
 	this->offset_max=1;
 	for(unsigned int i=1; i<this->offset_size; i++)
-		this->offset_max*=2;
+		this->offset_max*=2;*/
 	this->tag_size=32-this->index_size;
 	this->tag_max=1;
 	for(unsigned int i=1; i<this->tag_size; i++)
@@ -178,7 +178,7 @@ bool DMC::step(){
 	unsigned long index = (current.getAddress()%this->index_max);
 	if(DEBUG && index>=this->index_max)
 		cout << "WARNING: index out of bounds at " << current.getAddress() << ":" << index << ">=" << this->index_max << endl;
-	unsigned long tag = (current.getAddress()/this->index_max)/this->offset_max;
+	unsigned long tag = (current.getAddress()/this->index_max)/*/this->offset_max*/;
 	if(DEBUG && index>=this->index_max)
 		cout << "WARNING: tag out of bounds at " << current.getAddress() << ":" << tag << ">=" << this->tag_max << endl;
 	/*if(current.isStore()){
@@ -215,24 +215,23 @@ bool DMC::step(){
 			}
 			this->tracker.addHit();
 			return true;
-		} else {
-			if(FINEDEB){
-				cout << "Miss: \t" << current.getAddress() << "->";
-				this->lines[index].printLine();
-				cout << "\t";
-				this->fdb_looper++;
-				if(this->fdb_looper%5==0){
-					if(this->fdb_looper==25){
-						this->fdb_looper=0;
-						cout << endl;
-					} else
-						cout << "\n";
-				}
-			}
-			this->tracker.addMiss();
-			this->lines[index].tag=tag;
-			this->lines[index].valid=true;
 		}
+		if(FINEDEB){
+			cout << "Miss: \t" << current.getAddress() << "->";
+			this->lines[index].printLine();
+			cout << "\t";
+			this->fdb_looper++;
+			if(this->fdb_looper%5==0){
+				if(this->fdb_looper==25){
+					this->fdb_looper=0;
+					cout << endl;
+				} else
+					cout << "\n";
+			}
+		}
+		this->tracker.addMiss();
+		this->lines[index].tag=tag;
+		this->lines[index].valid=true;
 	//}
 	return false;
 }
