@@ -154,7 +154,10 @@ void DMC::setSizesAndMaxes(){
 }
 
 unsigned long DMC::maxAddress() const {
-	return ((unsigned long) 1)<<(this->line_size-1);
+	unsigned long toReturn=1;
+	for(unsigned int i=1; i<=this->line_size; i++)
+		toReturn*=2;
+	return toReturn;
 }
 
 double DMC::run(){
