@@ -204,7 +204,7 @@ bool DMC::step(){
 			cout << "WARNING: calculated address (0x" << hex << calculated_address << ") not equal to actual (0x" << hex << current.getAddress() << ")" << dec << endl;
 		}
 	}*/
-	if(this->lines[index].valid && this->lines[index].address==current.getAddress()){
+	if(this->lines[index].valid && this->lines[index].tag==index){
 			if(FINEDEB){
 				cout << "Hit:  \t0x" << hex << current.getAddress() << "->" << dec;
 				this->lines[index].printLine();
