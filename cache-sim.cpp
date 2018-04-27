@@ -144,10 +144,14 @@ void DMC::setSizesAndMaxes(){
 		this->index_size++;
 		this->index_max=this->index_max*2;
 	}
-	this->offset_size=(4-this->index_size%4)%4;
-	this->offset_max=1;
-	for(unsigned int i=1; i<=this->offset_size; i++)
-		this->offset_max*=2;
+	this->index_offset_size=(4-this->index_size%4)%4;
+	this->index_offset_max=1;
+	for(unsigned int i=1; i<=this->index_offset_size; i++)
+		this->index_offset_max*=2;
+	this->tag_offset_size=(4-this->index_offset_size)%4;
+	this->tag_offset_max=1;
+	for(unsigned int i=1; i<=this->tag_offset_size; i++)
+		this->tag_offset_max*=2;
 	this->tag_size=32-this->index_size-this->offset_size;
 	this->tag_max=1;
 	for(unsigned int i=1; i<=this->tag_size; i++)
@@ -183,7 +187,7 @@ bool DMC::step(){
 	unsigned long index = current.getAddress()%this->index_max;
 	if(DEBUG && index>=this->index_max)
 		cout << "WARNING: index out of bounds at 0x" << hex << current.getAddress() << ": 0x" <<  hex << index << ">=0x" << hex << this->index_max << endl;
-	unsigned long tag = (current.getAddress()/this->index_max)/this->offset_max;
+	unsigned long tag = (current.getAddress()/this->index_max)*this->tag_offset_max;
 	if(DEBUG && index>=this->index_max)
 		cout << "WARNING: tag out of bounds at 0x" << hex << current.getAddress() << ": 0x" << hex << tag << ">=0x" << hex << this->tag_max << endl;
 	/*if(current.isStore()){
@@ -273,5 +277,6 @@ void DMC::printVars(){
 	cout << "line_size:  \t" << this->line_size << "\tbits\t| maxAddress:\t0x" << hex << this->maxAddress() << endl;
 	cout << "index_size: \t" << this->index_size << "\tbits\t| index_max: \t0x" << hex << this->index_max << endl;
 	cout << "tag_size:   \t" << this->tag_size << "\tbits\t| tag_max:   \t0x" << hex << this->tag_max << endl;
-	cout << "offset_size:\t" << this->offset_size << "\tbits\t| offset_max:\t0x" << hex << this->offset_max << endl;
+	cout << "IDXOFFSIZE: \t" << this->offset_size << "\tbits\t| IDXOFFMAX: \t0x" << hex << this->offset_max << endl;
+	cout << "TAGOFFSIZE: \t" << this->offset_size << "\tbits\t| TAGOFFMAX: \t0x" << hex << this->offset_max << endl;
 }
