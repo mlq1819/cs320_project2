@@ -112,7 +112,7 @@ void CacheLine::printLine(){
 		cout << "1:";
 	else
 		cout << "0:";
-	cout << this->index << ":" << this->tag;
+	cout << this->getIndex() << ":" << this->tag;
 }
 
 DMC::DMC(FileReader * reader, unsigned int cache_size){
