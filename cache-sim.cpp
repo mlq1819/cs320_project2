@@ -184,9 +184,12 @@ bool DMC::step(){
 			this->lines[index].printLine();
 			cout << "\t";
 			this->fdb_looper++;
-			if(this->fdb_looper==4){
-				this->fdb_looper=0;
-				cout << endl;
+			if(this->fdb_looper%4==0){
+				if(this->fdb_loop==16){
+					this->fdb_looper=0;
+					cout << endl;
+				} else
+					cout << "\n";
 			}
 		}
 		this->tracker.addHit();
@@ -197,9 +200,12 @@ bool DMC::step(){
 			this->lines[index].printLine();
 			cout << "\t";
 			this->fdb_looper++;
-			if(this->fdb_looper==4){
-				this->fdb_looper=0;
-				cout << endl;
+			if(this->fdb_looper%4==0){
+				if(this->fdb_loop==16){
+					this->fdb_looper=0;
+					cout << endl;
+				} else
+					cout << "\n";
 			}
 		}
 	this->tracker.addMiss();
