@@ -143,6 +143,13 @@ void DMC::setSizesAndMaxes(){
 		this->index_size++;
 		this->index_max=this->index_max*2;
 	}
+	this->offset_max=0;
+	this->offset_size=this->index_size/4;
+	if(this->index_size%4!=0)
+		this->offset_size++;
+	this->offset_max=1;
+	for(unsigned int i=1; i<this->offset_size; i++)
+		this->offset_max*=2;
 	this->tag_size=32-this->index_size;
 	this->tag_max=1;
 	for(unsigned int i=1; i<this->tag_size; i++)
@@ -214,18 +221,18 @@ bool DMC::step(){
 			return true;
 		}
 		if(FINEDEB){
-				cout << "Miss: \t" << current.getAddress() << "->";
-				this->lines[index].printLine();
-				cout << "\t";
-				this->fdb_looper++;
-				if(this->fdb_looper%5==0){
-					if(this->fdb_looper==25){
-						this->fdb_looper=0;
-						cout << endl;
-					} else
-						cout << "\n";
-				}
+			cout << "Miss: \t" << current.getAddress() << "->";
+			this->lines[index].printLine();
+			cout << "\t";
+			this->fdb_looper++;
+			if(this->fdb_looper%5==0){
+				if(this->fdb_looper==25){
+					this->fdb_looper=0;
+					cout << endl;
+				} else
+					cout << "\n";
 			}
+		}
 		this->tracker.addMiss();
 		this->lines[index].tag=tag;
 		this->lines[index].valid=true;
@@ -238,17 +245,18 @@ void DMC::printCache(){
 	for(unsigned long i=0; i<num_lines; i++){
 		this->lines[i].printLine();
 		cout << "; \t";
-		if(i%20==19)
+		if(i%24==23)
 			cout << endl;
 	}
 	cout <<endl;
 }
 
 void DMC::printVars(){
-	cout << "cache_size:\t" << this->cache_size << "\tkB\t|" << endl;
+	cout << "cache_size: \t" << this->cache_size << "\tkB\t|" << endl;
 	cout << "--------------------------------+---------------------------" << endl;
-	cout << "line_size: \t" << this->line_size << "\tbits\t| maxAddress:\t" << this->maxAddress() << endl;
-	cout << "index_size:\t" << this->index_size << "\tbits\t| index_max: \t" << this->index_max << endl;
-	cout << "tag_size:  \t" << this->tag_size << "\tbits\t| tag_max:   \t" << this->tag_max << endl;
-	cout << "numLines():\t" << this->numLines() << "\tlines\t|\n\n" << endl;
+	cout << "line_size:  \t" << this->line_size << "\tbits\t| maxAddress:\t" << this->maxAddress() << endl;
+	cout << "index_size: \t" << this->index_size << "\tbits\t| index_max: \t" << this->index_max << endl;
+	cout << "tag_size:   \t" << this->tag_size << "\tbits\t| tag_max:   \t" << this->tag_max << endl;
+	cout << "offset_size:\t" << this->offset_size << "\tbits\t| offset_max:\t" << this->offset_max << endl;
+	cout << "numLines(): \t" << this->numLines() << "\tlines\t|\n\n" << endl;
 }
