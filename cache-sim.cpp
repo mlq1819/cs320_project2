@@ -277,6 +277,6 @@ void DMC::printVars(){
 	cout << "line_size:  \t" << this->line_size << "\tbits\t| maxAddress:\t0x" << hex << this->maxAddress() << endl;
 	cout << "index_size: \t" << this->index_size << "\tbits\t| index_max: \t0x" << hex << this->index_max << endl;
 	cout << "tag_size:   \t" << this->tag_size << "\tbits\t| tag_max:   \t0x" << hex << this->tag_max << endl;
-	cout << "IDXOFFSIZE: \t" << this->offset_size << "\tbits\t| IDXOFFMAX: \t0x" << hex << this->offset_max << endl;
-	cout << "TAGOFFSIZE: \t" << this->offset_size << "\tbits\t| TAGOFFMAX: \t0x" << hex << this->offset_max << endl;
+	cout << "IDXOFFSIZE: \t" << this->index_offset_size << "\tbits\t| IDXOFFMAX: \t0x" << hex << this->index_offset_max << endl;
+	cout << "TAGOFFSIZE: \t" << this->tag_offset_size << "\tbits\t| TAGOFFMAX: \t0x" << hex << this->tag_offset_max << endl;
 }
