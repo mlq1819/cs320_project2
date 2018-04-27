@@ -112,7 +112,7 @@ void CacheLine::printLine(){
 		cout << "1:";
 	else
 		cout << "0:";
-	cout << this->getIndex() << ":" << this->tag;
+	cout << this->index << ":" << this->tag;
 }
 
 DMC::DMC(FileReader * reader, unsigned int cache_size){
@@ -125,9 +125,9 @@ DMC::DMC(FileReader * reader, unsigned int cache_size){
 	this->index_size=1;
 	this->setSizesAndMaxes();
 	unsigned long num_lines = this->numLines();
-	CacheLine temp_lines[num_lines];
+	CacheLine temp_lines[this->index_max];
 	this->lines = temp_lines;
-	for(unsigned long i=0; i<index_max; i++)
+	for(unsigned long i=0; i<this->index_max; i++)
 		this->lines[i]=CacheLine(i);
 }
 
