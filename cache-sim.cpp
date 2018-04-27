@@ -143,10 +143,10 @@ void DMC::setSizesAndMaxes(){
 		this->index_size++;
 		this->index_max=this->index_max*2;
 	}
-	/*this->offset_size=(4-this->index_size%4)%4;
+	this->offset_size=(4-this->index_size%4)%4;
 	this->offset_max=1;
 	for(unsigned int i=1; i<this->offset_size; i++)
-		this->offset_max*=2;*/
+		this->offset_max*=2;
 	this->tag_size=32-this->index_size;
 	this->tag_max=1;
 	for(unsigned int i=1; i<this->tag_size; i++)
@@ -178,7 +178,7 @@ bool DMC::step(){
 	unsigned long index = (current.getAddress()%this->index_max);
 	if(DEBUG && index>=this->index_max)
 		cout << "WARNING: index out of bounds at " << current.getAddress() << ":" << index << ">=" << this->index_max << endl;
-	unsigned long tag = (current.getAddress()/this->index_max)/*/this->offset_max*/;
+	unsigned long tag = (current.getAddress()/this->index_max)/this->offset_max;
 	if(DEBUG && index>=this->index_max)
 		cout << "WARNING: tag out of bounds at " << current.getAddress() << ":" << tag << ">=" << this->tag_max << endl;
 	/*if(current.isStore()){
@@ -253,6 +253,6 @@ void DMC::printVars(){
 	cout << "line_size:  \t" << this->line_size << "\tbits\t| maxAddress:\t" << this->maxAddress() << endl;
 	cout << "index_size: \t" << this->index_size << "\tbits\t| index_max: \t" << this->index_max << endl;
 	cout << "tag_size:   \t" << this->tag_size << "\tbits\t| tag_max:   \t" << this->tag_max << endl;
-	//cout << "offset_size:\t" << this->offset_size << "\tbits\t| offset_max:\t" << this->offset_max << endl;
+	cout << "offset_size:\t" << this->offset_size << "\tbits\t| offset_max:\t" << this->offset_max << endl;
 	cout << "numLines(): \t" << this->numLines() << "\tlines\t|\n\n" << endl;
 }
