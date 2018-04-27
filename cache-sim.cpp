@@ -58,9 +58,9 @@ int main(int argc, char *argv[]){
 		max=1;
 	for(int i=0; i<max; i++){
 		DMC dmc = DMC(&reader, sizes[i]);
-		cout << "Direct-Mapped Cache: " << sizes[i] << "kB" << endl;
+		cout << "\nDirect-Mapped Cache: " << sizes[i] << "kB" << endl;
 		dmc.run();
-		cout << dmc.percent() << "% Accurate: " << dmc.getHits() << ", " << dmc.getTotal() << endl;
+		cout << dmc.percent() << "% Accurate: " << dmc.getHits() << ", " << dmc.getTotal() << "\n" << endl;
 		if(OUTPUT)
 			output << dmc.getHits() << "," << dmc.getTotal() << ";" << endl;
 	}
@@ -166,7 +166,6 @@ double DMC::run(){
 		this->step();
 	} while (this->reader->next());
 	if(DEBUG){
-		cout << endl;
 		this->printCache();
 		this->printVars();
 	}
@@ -244,7 +243,6 @@ void DMC::printCache(){
 		if(i%24==23)
 			cout << endl;
 	}
-	cout <<endl;
 }
 
 void DMC::printVars(){
