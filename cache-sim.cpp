@@ -124,7 +124,6 @@ DMC::DMC(FileReader * reader, unsigned int cache_size){
 	this->index_max=1;
 	this->index_size=1;
 	this->setSizesAndMaxes();
-	unsigned long num_lines = this->numLines();
 	CacheLine temp_lines[this->index_max];
 	this->lines = temp_lines;
 	for(unsigned long i=0; i<this->index_max; i++)
@@ -150,10 +149,19 @@ unsigned long DMC::maxAddress() const {
 }
 
 double DMC::run(){
+	if(DEBUG){
+		this->printCache();
+		cout << endl;
+	}
 	if(!this->reader->isRead())
 		this->reader->readFile();
 	else
 		this->reader->start();
+	if(DEBUG){
+		cout << endl;
+		this->printCache();
+		cout << endl;
+	}
 	do{
 		this->step();
 	} while (this->reader->next());
