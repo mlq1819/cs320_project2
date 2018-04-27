@@ -2,7 +2,7 @@
 #define FORCE false
 #define OUTPUT true
 #define DEBUG true
-#define FINEDEB true
+#define FINEDEB false
 #include <vector>
 
 using namespace std;
@@ -170,6 +170,8 @@ double DMC::run(){
 		this->step();
 	} while (this->reader->next());
 	if(DEBUG){
+		if(FINEDEB)
+			cout << endl;
 		this->printCache();
 		this->printVars();
 	}
@@ -216,6 +218,13 @@ bool DMC::step(){
 						cout << "\n";
 				}
 			}
+			if(DEBUG && this->lines[index].address!=current.getAddress()){
+				if(this->fdb_looper%4!=0){
+					this->fdb_looper=0;
+					cout << endl;
+				}
+				cout << "BAD HIT: \t0x" << hex << current.getAddress() << "!=0x" << hex << this->lines[index].address << endl;
+			}
 			this->tracker.addHit();
 			return true;
 		}
@@ -232,6 +241,13 @@ bool DMC::step(){
 					cout << "\n";
 			}
 		}
+		if(DEBUG && this->lines[index].valid && this->lines[index].address==current.getAddress()){
+				if(this->fdb_looper%4!=0){
+					this->fdb_looper=0;
+					cout << endl;
+				}
+				cout << "BAD MISS: \t0x" << hex << current.getAddress() << "==0x" << hex << this->lines[index].address << endl;
+			}
 		this->tracker.addMiss();
 		this->lines[index].tag=tag;
 		this->lines[index].address=current.getAddress(); //used for debugging
