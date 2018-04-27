@@ -126,7 +126,7 @@ DMC::DMC(FileReader * reader, unsigned int cache_size){
 	this->setSizesAndMaxes();
 	CacheLine temp_lines[this->index_max];
 	this->lines = temp_lines;
-	for(unsigned long i=0; i<this->index_max; i++)
+	for(unsigned int i=0; i<this->index_max; i++)
 		this->lines[i]=CacheLine(i);
 }
 
