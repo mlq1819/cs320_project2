@@ -3,7 +3,7 @@
 #define OUTPUT true
 #define DEBUG true
 #define FINEDEB false
-#define PART 6
+#define PART 0
 #include <vector>
 
 using namespace std;
@@ -131,6 +131,21 @@ int main(int argc, char *argv[]){
 		for(int i=0; i<max; i++){
 			SAC sac = SAC(&reader, associativities[i], true, true);
 			cout << "\n" << associativities[i] << "-Way Set-Associative Cache: Prefetching" << endl;
+			sac.run();
+			cout << sac.percent() << "% Accurate: " << sac.getHits() << ", " << sac.getTotal() << "\n" << endl;
+			if(OUTPUT)
+				output << sac.getHits() << "," << sac.getTotal() << "; ";
+		}
+	}
+	
+	if(PART==0 || PART==7){
+		unsigned int associativities[] = {2, 4, 8, 16};
+		max=4;
+		if(FINEDEB)
+			max=1;
+		for(int i=0; i<max; i++){
+			SAC sac = SAC(&reader, associativities[i], true, true);
+			cout << "\n" << associativities[i] << "-Way Set-Associative Cache: Prefetch on Miss" << endl;
 			sac.run();
 			cout << sac.percent() << "% Accurate: " << sac.getHits() << ", " << sac.getTotal() << "\n" << endl;
 			if(OUTPUT)
@@ -641,7 +656,7 @@ bool SAC::step(){
 		this->lines[index][inner_index].valid=true;
 	}
 	this->tracker.addMiss();
-	if(this->prefetching){
+	if(this->prefetching || this->prefetch_on_miss){
 		Line next = this->reader->peak();
 		if(next.isStore() || next.getAddress()!=0){
 			next_index=(next.getAddress()>>this->offset_size)%this->index_max;
