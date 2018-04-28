@@ -642,8 +642,7 @@ bool FAC::step(){
 void FAC::printCache(){
 	for(unsigned long i=0; i<this->lines.size(); i++){
 		for(unsigned int j=0; j<this->lines[i].size(); j++){
-			this->lines[i][j].printLine();
-			cout << ";   \t";
+			cout << hex << this->lines[i][j].address << ";   \t" << dec;
 		}
 		cout << endl;
 	}
