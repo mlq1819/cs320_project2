@@ -649,7 +649,7 @@ void FAC::printCache(){
 }
 
 void FAC::printVars(){
-	cout << "cache_size: \t" << dec << this->cache_size << "-way\t\t| numLines():\t" << dec << this->numLines() << "\tlines\t" << dec << endl;
+	cout << "cache_size: \t" << dec << this->cache_size << "\tkB\t| numLines():\t" << dec << this->numLines() << "\tlines\t" << dec << endl;
 	cout << "--------------------------------+---------------------------" << endl;
 	cout << "line_size:  \t" << dec << this->line_size << "\tbits\t| maxAddress:\t0x" << hex << this->maxAddress() << dec << endl;
 	cout << "index_size: \t" << dec << this->index_size << "\tbits\t| index_max: \t0x" << hex << this->index_max << dec << endl;
