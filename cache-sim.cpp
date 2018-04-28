@@ -571,10 +571,10 @@ double FAC::run(){
 bool FAC::step(){
 	Line current = this->reader->current();
 	unsigned long index;
-	unsigned long tag = current.getAddress()>>(this->offset_size+1);
+	unsigned long tag = current.getAddress()>>(this->offset_size);
 	bool hit=false;
 	unsigned int inner_index;
-	for(index=0; index<2; index++){
+	for(index=0; index<this->lines.size(); index++){
 		for(inner_index=0; inner_index<this->lines[index].size(); inner_index++){
 			if(this->lines[index][inner_index].valid && this->lines[index][inner_index].tag==tag){
 				hit=true;
@@ -604,8 +604,8 @@ bool FAC::step(){
 				}
 				this->lru[index][inner_index]=0;
 			}
-			this->tracker.addHit();
 			this->hot=index;
+			this->tracker.addHit();
 			return true;
 	}
 	if(FINEDEB){
