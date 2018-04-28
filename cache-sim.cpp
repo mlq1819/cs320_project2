@@ -62,8 +62,24 @@ int main(int argc, char *argv[]){
 		dmc.run();
 		cout << dmc.percent() << "% Accurate: " << dmc.getHits() << ", " << dmc.getTotal() << "\n" << endl;
 		if(OUTPUT)
-			output << dmc.getHits() << "," << dmc.getTotal() << ";" << endl;
+			output << dmc.getHits() << "," << dmc.getTotal() << "; ";
 	}
+	if(OUTPUT)
+			output << endl;
+	unsigned int associativities[] = {2, 4, 8, 16};
+	int max =4;
+	if(FINEDEB)
+		max=1;
+	for(int i=0; i<max; i++){
+		SAC sac = SAC(&reader, associativities[i]);
+		cout << "\n" << associativities[i] << "-Way Set Associative Cache" << endl;
+		sac.run();
+		cout << sac.percent() << "% Accurate: " << sac.getHits() << ", " << sac.getTotal() << "\n" << endl;
+		if(OUTPUT)
+			output << sac.getHits() << "," << sac.getTotal() << "; ";
+	}
+	if(OUTPUT)
+			output << endl;
 	} catch (exception e){
 		cout << "\nException caught" << endl;
 		throw e;
