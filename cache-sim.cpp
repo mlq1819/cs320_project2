@@ -3,7 +3,7 @@
 #define OUTPUT true
 #define DEBUG true
 #define FINEDEB false
-#define PART 0
+#define PART 6
 #include <vector>
 
 using namespace std;
@@ -116,6 +116,21 @@ int main(int argc, char *argv[]){
 		for(int i=0; i<max; i++){
 			SAC sac = SAC(&reader, associativities[i], false);
 			cout << "\n" << associativities[i] << "-Way Set-Associative Cache: No allocation on write miss" << endl;
+			sac.run();
+			cout << sac.percent() << "% Accurate: " << sac.getHits() << ", " << sac.getTotal() << "\n" << endl;
+			if(OUTPUT)
+				output << sac.getHits() << "," << sac.getTotal() << "; ";
+		}
+	}
+	
+	if(PART==0 || PART==6){
+		unsigned int associativities[] = {2, 4, 8, 16};
+		max=4;
+		if(FINEDEB)
+			max=1;
+		for(int i=0; i<max; i++){
+			SAC sac = SAC(&reader, associativities[i], true, true);
+			cout << "\n" << associativities[i] << "-Way Set-Associative Cache: Prefetching" << endl;
 			sac.run();
 			cout << sac.percent() << "% Accurate: " << sac.getHits() << ", " << sac.getTotal() << "\n" << endl;
 			if(OUTPUT)
@@ -735,7 +750,6 @@ bool FACL::step(){
 	unsigned long index;
 	unsigned long tag = current.getAddress()>>(this->offset_size);
 	bool hit=false;
-	unsigned int inner_index;
 	for(index=0; index<this->lines.size(); index++){
 		if(this->lines[index].valid && this->lines[index].tag==tag){
 			hit=true;
