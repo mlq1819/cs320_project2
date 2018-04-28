@@ -571,7 +571,7 @@ double FAC::run(){
 bool FAC::step(){
 	Line current = this->reader->current();
 	unsigned long index;
-	unsigned long tag = current.getAddress()>>this->offset_size;
+	unsigned long tag = current.getAddress()>>(this->offset_size+1);
 	bool hit=false;
 	unsigned int inner_index;
 	for(index=0; index<2; index++){
