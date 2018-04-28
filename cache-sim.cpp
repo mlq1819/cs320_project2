@@ -67,7 +67,7 @@ int main(int argc, char *argv[]){
 	if(OUTPUT)
 			output << endl;
 	unsigned int associativities[] = {2, 4, 8, 16};
-	int max =4;
+	max =4;
 	if(FINEDEB)
 		max=1;
 	for(int i=0; i<max; i++){
