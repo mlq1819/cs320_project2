@@ -121,6 +121,8 @@ int main(int argc, char *argv[]){
 			if(OUTPUT)
 				output << sac.getHits() << "," << sac.getTotal() << "; ";
 		}
+		if(OUTPUT)
+			output << endl;
 	}
 	
 	if(PART==0 || PART==6){
@@ -136,6 +138,8 @@ int main(int argc, char *argv[]){
 			if(OUTPUT)
 				output << sac.getHits() << "," << sac.getTotal() << "; ";
 		}
+		if(OUTPUT)
+			output << endl;
 	}
 	
 	if(PART==0 || PART==7){
@@ -151,6 +155,8 @@ int main(int argc, char *argv[]){
 			if(OUTPUT)
 				output << sac.getHits() << "," << sac.getTotal() << "; ";
 		}
+		if(OUTPUT)
+			output << endl;
 	}
 	
 	} catch (exception e){
