@@ -90,7 +90,7 @@ int main(int argc, char *argv[]){
 		FACL facl = FACL(&reader);
 		cout << "\nFully-Associative Cache: LRU" << endl;
 		facl.run();
-		cout << facl.percent() << "% Accurate: " << facl.getHits() << ", " << fach.getTotal() << "\n" << endl;
+		cout << facl.percent() << "% Accurate: " << facl.getHits() << ", " << facl.getTotal() << "\n" << endl;
 		if(OUTPUT)
 			output << facl.getHits() << "," << facl.getTotal() << "; ";
 		if(OUTPUT)
@@ -631,7 +631,7 @@ bool FACL::step(){
 	if(hit){
 		if(FINEDEB){
 				cout << "Hit:  \t0x" << hex << current.getAddress() << "->" << dec;
-				this->lines[index][inner_index].printLine();
+				this->lines[index].printLine();
 				cout << "\t";
 				this->fdb_looper++;
 				if(this->fdb_looper%4==0){
@@ -642,7 +642,7 @@ bool FACL::step(){
 						cout << "\n";
 				}
 			}
-			if(this->lru[index][inner_index]!=0){
+			if(this->lru[index]!=0){
 				for(unsigned int i=0; i<this->lru.size(); i++){
 					this->lru[i]++;
 				}
