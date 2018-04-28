@@ -551,32 +551,6 @@ bool SAC::step(){
 	Line current = this->reader->current();
 	unsigned long next_index=0;
 	unsigned long next_inner_index=0;
-	if(this->prefetching){
-		Line next = this->reader->peak();
-		if(next.isStore() || next.getAddress()!=0){
-			next_index=(next.getAddress()>>this->offset_size)%this->index_max;
-			unsigned long tag = ((next.getAddress()>>this->offset_size)>>this->index_size);
-			bool hit=false;
-			for(next_inner_index=0; next_inner_index<this->lines[next_index].size(); next_inner_index++){
-				if(this->lines[next_index][next_inner_index].valid && this->lines[next_index][next_inner_index].tag==tag){
-					hit=true;
-					break;
-				}
-			}
-			if(!hit){
-				for(unsigned int i=0; i<this->lru[next_index].size(); i++){
-					if(this->lru[next_index][i]>this->lru[next_index][next_inner_index])
-						next_inner_index=i;
-				}
-				if(this->lru[next_index][next_inner_index]!=0){
-					for(unsigned int i=0; i<this->lru[next_index].size(); i++){
-						this->lru[next_index][i]++;
-					}
-					this->lru[next_index][next_inner_index]=0;
-				}
-			}
-		}
-	}
 	unsigned long index = (current.getAddress()>>this->offset_size)%this->index_max;
 	
 	if(DEBUG && index>=this->index_max)
@@ -604,22 +578,40 @@ bool SAC::step(){
 						cout << "\n";
 				}
 			}
-			if(this->lru[index][inner_index]!=0){
-				for(unsigned int i=0; i<this->lru[index].size(); i++){
-					this->lru[index][i]++;
-				}
-				this->lru[index][inner_index]=0;
+		if(this->lru[index][inner_index]!=0){
+			for(unsigned int i=0; i<this->lru[index].size(); i++){
+				this->lru[index][i]++;
 			}
-			this->tracker.addHit();
-			if(this->prefetching){
-				if(this->lru[next_index][next_inner_index]!=0){
-					for(unsigned int i=0; i<this->lru[next_index].size(); i++){
-						this->lru[next_index][i]++;
+			this->lru[index][inner_index]=0;
+		}
+		this->tracker.addHit();
+		if(this->prefetching){
+			Line next = this->reader->peak();
+			if(next.isStore() || next.getAddress()!=0){
+				next_index=(next.getAddress()>>this->offset_size)%this->index_max;
+				unsigned long tag = ((next.getAddress()>>this->offset_size)>>this->index_size);
+				bool hit=false;
+				for(next_inner_index=0; next_inner_index<this->lines[next_index].size(); next_inner_index++){
+					if(this->lines[next_index][next_inner_index].valid && this->lines[next_index][next_inner_index].tag==tag){
+						hit=true;
+						break;
 					}
+				}
+				if(!hit){
+					for(unsigned int i=0; i<this->lru[next_index].size(); i++){
+						if(this->lru[next_index][i]>this->lru[next_index][next_inner_index])
+							next_inner_index=i;
+					}
+					if(this->lru[next_index][next_inner_index]!=0){
+						for(unsigned int i=0; i<this->lru[next_index].size(); i++){
+							this->lru[next_index][i]++;
+						}
 					this->lru[next_index][next_inner_index]=0;
+					}
 				}
 			}
-			return true;
+		}
+	return true;
 	}
 	if(FINEDEB){
 		cout << "Miss: \t0x" << hex << current.getAddress() << dec << "\t";
@@ -650,11 +642,29 @@ bool SAC::step(){
 	}
 	this->tracker.addMiss();
 	if(this->prefetching){
-		if(this->lru[next_index][next_inner_index]!=0){
-			for(unsigned int i=0; i<this->lru[next_index].size(); i++){
-				this->lru[next_index][i]++;
+		Line next = this->reader->peak();
+		if(next.isStore() || next.getAddress()!=0){
+			next_index=(next.getAddress()>>this->offset_size)%this->index_max;
+			unsigned long tag = ((next.getAddress()>>this->offset_size)>>this->index_size);
+			bool hit=false;
+			for(next_inner_index=0; next_inner_index<this->lines[next_index].size(); next_inner_index++){
+				if(this->lines[next_index][next_inner_index].valid && this->lines[next_index][next_inner_index].tag==tag){
+					hit=true;
+					break;
+				}
 			}
-			this->lru[next_index][next_inner_index]=0;
+			if(!hit){
+				for(unsigned int i=0; i<this->lru[next_index].size(); i++){
+					if(this->lru[next_index][i]>this->lru[next_index][next_inner_index])
+						next_inner_index=i;
+				}
+				if(this->lru[next_index][next_inner_index]!=0){
+					for(unsigned int i=0; i<this->lru[next_index].size(); i++){
+						this->lru[next_index][i]++;
+					}
+				this->lru[next_index][next_inner_index]=0;
+				}
+			}
 		}
 	}
 	return false;
