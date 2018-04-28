@@ -37,7 +37,7 @@ class FileReader{
 		bool atStart() const {return this->index==0;};
 		bool atEnd() const {return this->index==this->getSize()-1;};
 		bool next();
-		Line peak() const {return this->lines[this->index];};
+		Line peak() const;
 		Line current() const {return this->lines[this->index];};
 		void start(){this->index=0;};
 		void end(){this->index=this->getSize()-1;};

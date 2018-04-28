@@ -170,6 +170,13 @@ bool FileReader::next(){
 	return false;
 }
 
+Line FileReader::peak() const {
+	if(this->index<this->getSize()-1){
+		return this->lines[this->index+1];
+	}
+	return Line(false, 0);
+}
+
 void CacheLine::printLine(){
 	cout << "0x" << hex << this->address << ":" << dec;
 	if(this->valid)
@@ -527,7 +534,36 @@ double SAC::run(){
 
 bool SAC::step(){
 	Line current = this->reader->current();
+	unsigned long next_index=0;
+	unsigned long next_inner_index=0;
+	if(this->prefetching){
+		Line next = this->reader->peak();
+		if(next.valid || next.address()!=0){
+			next_index=(next.getAddress()>>this->offset_size)%this->index_max;
+			unsigned long tag = ((next.getAddress()>>this->offset_size)>>this->index_size);
+			bool hit=false;
+			for(inner_index=0; inner_index<this->lines[index].size(); inner_index++){
+				if(this->lines[index][inner_index].valid && this->lines[index][inner_index].tag==tag){
+					hit=true;
+					break;
+				}
+			}
+			if(!hit){
+				for(unsigned int i=0; i<this->lru[next_index].size(); i++){
+					if(this->lru[next_index][i]>this->lru[next_index][next_inner_index])
+						next_inner_index=i;
+				}
+				if(this->lru[next_index][next_inner_index]!=0){
+					for(unsigned int i=0; i<this->lru[next_index].size(); i++){
+						this->lru[next_index][i]++;
+					}
+					this->lru[next_index][next_inner_index]=0;
+				}
+			}
+		}
+	}
 	unsigned long index = (current.getAddress()>>this->offset_size)%this->index_max;
+	
 	if(DEBUG && index>=this->index_max)
 		cout << "WARNING: index out of bounds at 0x" << hex << current.getAddress() << ": 0x" <<  hex << index << ">=0x" << hex << this->index_max << dec << endl;
 	unsigned long tag = ((current.getAddress()>>this->offset_size)>>this->index_size);
@@ -560,6 +596,14 @@ bool SAC::step(){
 				this->lru[index][inner_index]=0;
 			}
 			this->tracker.addHit();
+			if(this->prefetching){
+				if(this->lru[next_index][next_inner_index]!=0){
+					for(unsigned int i=0; i<this->lru[next_index].size(); i++){
+						this->lru[next_index][i]++;
+					}
+					this->lru[next_index][next_inner_index]=0;
+				}
+			}
 			return true;
 	}
 	if(FINEDEB){
@@ -590,6 +634,14 @@ bool SAC::step(){
 		this->lines[index][inner_index].valid=true;
 	}
 	this->tracker.addMiss();
+	if(this->prefetching){
+		if(this->lru[next_index][next_inner_index]!=0){
+			for(unsigned int i=0; i<this->lru[next_index].size(); i++){
+				this->lru[next_index][i]++;
+			}
+			this->lru[next_index][next_inner_index]=0;
+		}
+	}
 	return false;
 }
 
