@@ -355,7 +355,7 @@ void DMC::printVars(){
 }
 
 SAC::SAC(FileReader * reader, unsigned int associativity){
-	this->allocate_on_wrte_miss=true;
+	this->allocate_on_write_miss=true;
 	this->reader=reader; 
 	this->tracker=Tracker();
 	this->set_associativity=associativity;
@@ -382,7 +382,7 @@ SAC::SAC(FileReader * reader, unsigned int associativity){
 }
 
 SAC::SAC(FileReader * reader, unsigned int associativity, bool allocate_on_write_miss){
-	this->allocate_on_wrte_miss=false;
+	this->allocate_on_write_miss=allocate_on_write_miss;
 	this->reader=reader; 
 	this->tracker=Tracker();
 	this->set_associativity=associativity;

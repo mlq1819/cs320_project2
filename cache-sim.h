@@ -128,6 +128,7 @@ class SAC{
 		void printVars();
 	public:
 		SAC(FileReader *, unsigned int);
+		SAC(FileReader *, unsigned int, bool);
 		unsigned int getCacheSize() const {return this->cache_size;};
 		Line operator[](std::size_t index) const {return (*this->reader)[index];};
 		unsigned long numLines() const {return (cache_size*1024)/line_size/this->set_associativity;};
