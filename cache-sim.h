@@ -37,6 +37,7 @@ class FileReader{
 		bool atStart() const {return this->index==0;};
 		bool atEnd() const {return this->index==this->getSize()-1;};
 		bool next();
+		Line peak() const {return this->lines[this->index];};
 		Line current() const {return this->lines[this->index];};
 		void start(){this->index=0;};
 		void end(){this->index=this->getSize()-1;};
@@ -119,6 +120,8 @@ class SAC{
 		unsigned int offset_max;
 		unsigned int fdb_looper;
 		bool allocate_on_write_miss;
+		bool prefetching;
+		bool prefetch_on_miss;
 		std::vector<std::vector<CacheLine>> lines;
 		std::vector<std::vector<int>> lru;
 		Tracker tracker;
@@ -129,6 +132,8 @@ class SAC{
 	public:
 		SAC(FileReader *, unsigned int);
 		SAC(FileReader *, unsigned int, bool);
+		SAC(FileReader *, unsigned int, bool, bool);
+		SAC(FileReader *, unsigned int, bool, bool, bool);
 		unsigned int getCacheSize() const {return this->cache_size;};
 		Line operator[](std::size_t index) const {return (*this->reader)[index];};
 		unsigned long numLines() const {return (cache_size*1024)/line_size/this->set_associativity;};

@@ -367,6 +367,8 @@ void DMC::printVars(){
 
 SAC::SAC(FileReader * reader, unsigned int associativity){
 	this->allocate_on_write_miss=true;
+	this->prefetching=false;
+	this->prefetch_on_miss=false;
 	this->reader=reader; 
 	this->tracker=Tracker();
 	this->set_associativity=associativity;
@@ -394,6 +396,66 @@ SAC::SAC(FileReader * reader, unsigned int associativity){
 
 SAC::SAC(FileReader * reader, unsigned int associativity, bool allocate_on_write_miss){
 	this->allocate_on_write_miss=allocate_on_write_miss;
+	this->prefetching=false;
+	this->prefetch_on_miss=false;
+	this->reader=reader; 
+	this->tracker=Tracker();
+	this->set_associativity=associativity;
+	this->tag_max=1;
+	this->tag_size=1;
+	this->index_max=1;
+	this->index_size=1;
+	this->fdb_looper=0;
+	this->setSizesAndMaxes();
+	this->lines=vector<vector<CacheLine>>();
+	this->lru=vector<vector<int>>();
+	for(unsigned int i=0; i<this->index_max; i++){
+		this->lines.push_back(vector<CacheLine>());
+		this->lru.push_back(vector<int>());
+		for(unsigned int j=0; j<this->set_associativity; j++){
+			this->lines[i].push_back(CacheLine(i));
+			this->lru[i].push_back(this->set_associativity-j-1);
+		}
+		this->lines[i].shrink_to_fit();
+		this->lru[i].shrink_to_fit();
+	}
+	this->lines.shrink_to_fit();
+	this->lru.shrink_to_fit();
+}
+
+SAC::SAC(FileReader * reader, unsigned int associativity, bool allocate_on_write_miss, bool prefetching){
+	this->allocate_on_write_miss=allocate_on_write_miss;
+	this->prefetching=prefetching;
+	this->prefetch_on_miss=false;
+	this->reader=reader; 
+	this->tracker=Tracker();
+	this->set_associativity=associativity;
+	this->tag_max=1;
+	this->tag_size=1;
+	this->index_max=1;
+	this->index_size=1;
+	this->fdb_looper=0;
+	this->setSizesAndMaxes();
+	this->lines=vector<vector<CacheLine>>();
+	this->lru=vector<vector<int>>();
+	for(unsigned int i=0; i<this->index_max; i++){
+		this->lines.push_back(vector<CacheLine>());
+		this->lru.push_back(vector<int>());
+		for(unsigned int j=0; j<this->set_associativity; j++){
+			this->lines[i].push_back(CacheLine(i));
+			this->lru[i].push_back(this->set_associativity-j-1);
+		}
+		this->lines[i].shrink_to_fit();
+		this->lru[i].shrink_to_fit();
+	}
+	this->lines.shrink_to_fit();
+	this->lru.shrink_to_fit();
+}
+
+SAC::SAC(FileReader * reader, unsigned int associativity, bool allocate_on_write_miss, bool prefetching, bool prefetching_on_miss){
+	this->allocate_on_write_miss=allocate_on_write_miss;
+	this->prefetching=!prefetching_on_miss&&prefetching;
+	this->prefetch_on_miss=prefetching_on_miss;
 	this->reader=reader; 
 	this->tracker=Tracker();
 	this->set_associativity=associativity;
@@ -773,7 +835,6 @@ bool FACH::step(){
 	unsigned long index;
 	unsigned long tag = current.getAddress()>>(this->offset_size);
 	bool hit=false;
-	unsigned int inner_index;
 	for(index=0; index<this->lines.size(); index++){
 		for(inner_index=0; inner_index<this->lines[index].size(); inner_index++){
 			if(this->lines[index][inner_index].valid && this->lines[index][inner_index].tag==tag){
