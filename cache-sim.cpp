@@ -305,3 +305,160 @@ void DMC::printVars(){
 	cout << "tag_size:   \t" << dec << this->tag_size << "\tbits\t| tag_max:   \t0x" << hex << this->tag_max << dec << endl;
 	cout << "offset_size:\t" << dec << this->offset_size << "\tbits\t| offset_max: \t" << hex << this->offset_max << dec << endl;
 }
+
+SAC::SAC(FileReader * reader, unsigned int associativity){
+	this->reader=reader; 
+	this->tracker=Tracker();
+	this->set_associativity=associativity;
+	this->tag_max=1;
+	this->tag_size=1;
+	this->index_max=1;
+	this->index_size=1;
+	this->fdb_looper=0;
+	this->setSizesAndMaxes();
+	this->lines=vector<vector<CacheLine>>();
+	this->lru=vector<<vector<int>>();
+	for(unsigned int i=0; i<this->index_max; i++){
+		this->lines.push_back(vector<CacheLine>());
+		this->lru.push_back(vector<int>());
+		for(unsigned int j=0; j<this->set_associativity; j++){
+			this->lines[i].push_back(CacheLine(i));
+			this->lru[i].push_back(this->set_associativity-j-1);
+		}
+		this->lines[i].shrink_to_fit();
+		this->lru[i].shrink_to_fit();
+	}
+	this->lines.shrink_to_fit();
+	this->lru.shrink_to_fit();
+}
+
+void SAC::setSizesAndMaxes(){
+	this->index_max=1;
+	this->index_size=0;
+	unsigned int num_lines = this->numLines();
+	while(this->index_max<num_lines){
+		this->index_size++;
+		this->index_max=this->index_max*2;
+	}
+	this->offset_size=0;
+	for(unsigned int i=1; i<this->line_size; i*=2)
+		this->offset_size++;
+	this->offset_max=1;
+	for(unsigned int i=1; i<=this->offset_size; i++)
+		this->offset_max*=2;
+	this->tag_size=32-this->index_size-this->offset_size;
+	this->tag_max=1;
+	for(unsigned int i=1; i<=this->tag_size; i++)
+		this->tag_max=this->tag_max*2;
+}
+
+unsigned long SAC::maxAddress() const {
+	unsigned long toReturn=1;
+	for(unsigned int i=1; i<=this->line_size; i++)
+		toReturn*=2;
+	return toReturn;
+}
+
+double SAC::run(){
+	if(!this->reader->isRead())
+		this->reader->readFile();
+	else
+		this->reader->start();
+	do{
+		this->step();
+	} while (this->reader->next());
+	if(DEBUG){
+		if(FINEDEB)
+			cout << endl;
+		this->printCache();
+		this->printVars();
+	}
+	return this->tracker.percent();
+}
+
+bool SAC::step(){
+	Line current = this->reader->current();
+	unsigned long index = (current.getAddress()>>this->offset_size)%this->index_max;
+	if(DEBUG && index>=this->index_max)
+		cout << "WARNING: index out of bounds at 0x" << hex << current.getAddress() << ": 0x" <<  hex << index << ">=0x" << hex << this->index_max << dec << endl;
+	unsigned long tag = ((current.getAddress()>>this->offset_size)>>this->index_size);
+	bool hit=false;
+	unsigned int inner_index;
+	for(inner_index=0; inner_index<this->lines[index].size(); inner_index++){
+		if(this->lines[index][inner_index].valid && this->lines[index][inner_index].tag==tag){
+			hit=true;
+			break;
+		}
+	}
+	if(hit){
+		if(FINEDEB){
+				cout << "Hit:  \t0x" << hex << current.getAddress() << "->" << dec;
+				this->lines[index][inner_index].printLine();
+				cout << "\t";
+				this->fdb_looper++;
+				if(this->fdb_looper%4==0){
+					if(this->fdb_looper==20){
+						this->fdb_looper=0;
+						cout << endl;
+					} else
+						cout << "\n";
+				}
+			}
+			if(this->lru[index][inner_index]!=0){
+				for(unsigned int i=0; i<this->lru[index].size(); i++){
+					this->lru[index][i]++;
+				}
+				this->lru[index][inner_index]=0;
+			}
+			this->tracker.addHit();
+			return true;
+	}
+	if(FINEDEB){
+		cout << "Miss: \t0x" << hex << current.getAddress() << dec << "\t";
+		this->fdb_looper++;
+		if(this->fdb_looper%4==0){
+			if(this->fdb_looper==20){
+				this->fdb_looper=0;
+				cout << endl;
+			} else
+				cout << "\n";
+		}
+	}
+	inner_index=0;
+	for(unsigned int i=0; i<this->lru[index].size(); i++){
+		if(this->lru[index][i]>this->lru[index][inner_index])
+			inner_index=i;
+	}
+	if(this->lru[index][inner_index]!=0){
+		for(unsigned int i=0; i<this->lru[index].size(); i++){
+			this->lru[index][i]++;
+		}
+		this->lru[index][inner_index]=0;
+	}
+	this->lines[index][inner_index].tag=tag;
+	this->lines[index][inner_index].address=current.getAddress(); //used for debugging
+	this->lines[index][inner_index].valid=true;
+	this->tracker.addMiss();
+	return false;
+}
+
+void SAC::printCache(){
+	unsigned long num_lines=this->numLines();
+	for(unsigned long i=0; i<num_lines; i++){
+		for(unsigned int j=0; j<this->lines[i].size(); j++){
+			this->lines[i][j].printLine();
+			cout << ";   \t";
+		}
+		cout << endl;
+	}
+	cout << endl;
+}
+
+void SAC::printVars(){
+	cout << "associativity:\t" << dec << this->set_associativity << "\tkB\t| numLines():\t" << dec << this->numLines() << "\tlines\t" << dec << endl;
+	cout << "--------------------------------+---------------------------" << endl;
+	cout << "line_size:  \t" << dec << this->line_size << "\tbits\t| maxAddress:\t0x" << hex << this->maxAddress() << dec << endl;
+	cout << "index_size: \t" << dec << this->index_size << "\tbits\t| index_max: \t0x" << hex << this->index_max << dec << endl;
+	cout << "tag_size:   \t" << dec << this->tag_size << "\tbits\t| tag_max:   \t0x" << hex << this->tag_max << dec << endl;
+	cout << "offset_size:\t" << dec << this->offset_size << "\tbits\t| offset_max: \t" << hex << this->offset_max << dec << endl;
+}

@@ -105,4 +105,38 @@ class DMC{
 		bool step();
 };
 
+class SAC{
+	private:
+		FileReader * reader;
+		const unsigned int cache_size = 16;
+		const unsigned int line_size = 32;
+		unsigned int set_associativity;
+		unsigned int tag_size;
+		unsigned int index_size;
+		unsigned int index_max;
+		unsigned int tag_max;
+		unsigned int offset_size;
+		unsigned int offset_max;
+		unsigned int fdb_looper;
+		std::vector<std::vector<CacheLine>> lines;
+		std::vector<std::vector<int>> lru;
+		Tracker tracker;
+		void setSizesAndMaxes();
+		unsigned long maxAddress() const;
+		void printCache();
+		void printVars();
+	public:
+		SAC(FileReader *, unsigned int);
+		unsigned int getCacheSize() const {return this->cache_size;};
+		Line operator[](std::size_t index) const {return (*this->reader)[index];};
+		unsigned long numLines() const {return (cache_size*1024)/line_size/this->set_associativity;};
+		unsigned int getTagSize() const {return this->tag_size;};
+		unsigned long getHits() const {return this->tracker.getHits();};
+		unsigned long getMisses() const {return this->tracker.getMisses();};
+		unsigned long getTotal() const {return this->tracker.getTotal();};
+		double percent() const {return this->tracker.percent();};
+		double run();
+		bool step();
+}
+
 #endif
