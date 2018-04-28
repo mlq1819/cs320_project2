@@ -66,20 +66,30 @@ int main(int argc, char *argv[]){
 	}
 	if(OUTPUT)
 			output << endl;
+	
 	unsigned int associativities[] = {2, 4, 8, 16};
 	max =4;
 	if(FINEDEB)
 		max=1;
 	for(int i=0; i<max; i++){
 		SAC sac = SAC(&reader, associativities[i]);
-		cout << "\n" << associativities[i] << "-Way Set Associative Cache" << endl;
+		cout << "\n" << associativities[i] << "-Way Set-Associative Cache" << endl;
 		sac.run();
 		cout << sac.percent() << "% Accurate: " << sac.getHits() << ", " << sac.getTotal() << "\n" << endl;
 		if(OUTPUT)
 			output << sac.getHits() << "," << sac.getTotal() << "; ";
 	}
+	
+	FAC fac = FAC(&reader);
+	cout << "\nFully-Associative Cache" << endl;
+	fac.run();
+	cout << fac.percent() << "% Accurate: " << fac.getHits() << ", " << fac.getTotal() << "\n" << endl;
+	if(OUTPUT)
+		output << fac.getHits() << "," << fac.getTotal() << "; ";
 	if(OUTPUT)
 			output << endl;
+	
+	
 	} catch (exception e){
 		cout << "\nException caught" << endl;
 		throw e;
