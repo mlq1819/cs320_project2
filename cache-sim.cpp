@@ -54,7 +54,7 @@ int main(int argc, char *argv[]){
 		cout << "Outputting to " << argv[2] << endl;
 	int max;
 	
-	if(PART==0 || PART==1{
+	if(PART==0 || PART==1){
 		unsigned int sizes[] = {1, 4, 16, 32};
 		max = 4;
 		if(FINEDEB)
