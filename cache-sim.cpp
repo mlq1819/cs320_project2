@@ -538,12 +538,12 @@ bool SAC::step(){
 	unsigned long next_inner_index=0;
 	if(this->prefetching){
 		Line next = this->reader->peak();
-		if(next.valid || next.address()!=0){
+		if(next.isStore() || next.getAddress()!=0){
 			next_index=(next.getAddress()>>this->offset_size)%this->index_max;
 			unsigned long tag = ((next.getAddress()>>this->offset_size)>>this->index_size);
 			bool hit=false;
-			for(inner_index=0; inner_index<this->lines[index].size(); inner_index++){
-				if(this->lines[index][inner_index].valid && this->lines[index][inner_index].tag==tag){
+			for(next_inner_index=0; next_inner_index<this->lines[next_index].size(); next_inner_index++){
+				if(this->lines[next_index][next_inner_index].valid && this->lines[next_index][next_inner_index].tag==tag){
 					hit=true;
 					break;
 				}
@@ -887,6 +887,7 @@ bool FACH::step(){
 	unsigned long index;
 	unsigned long tag = current.getAddress()>>(this->offset_size);
 	bool hit=false;
+	unsigned long inner_index;
 	for(index=0; index<this->lines.size(); index++){
 		for(inner_index=0; inner_index<this->lines[index].size(); inner_index++){
 			if(this->lines[index][inner_index].valid && this->lines[index][inner_index].tag==tag){
