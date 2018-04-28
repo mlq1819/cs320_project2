@@ -144,7 +144,7 @@ int main(int argc, char *argv[]){
 		if(FINEDEB)
 			max=1;
 		for(int i=0; i<max; i++){
-			SAC sac = SAC(&reader, associativities[i], true, true);
+			SAC sac = SAC(&reader, associativities[i], true, false, true);
 			cout << "\n" << associativities[i] << "-Way Set-Associative Cache: Prefetch on Miss" << endl;
 			sac.run();
 			cout << sac.percent() << "% Accurate: " << sac.getHits() << ", " << sac.getTotal() << "\n" << endl;
