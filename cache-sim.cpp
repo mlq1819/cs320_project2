@@ -3,7 +3,7 @@
 #define OUTPUT true
 #define DEBUG true
 #define FINEDEB false
-#define PART 3
+#define PART 0
 #include <vector>
 
 using namespace std;
@@ -97,6 +97,20 @@ int main(int argc, char *argv[]){
 				output << endl;
 	}
 	
+	if(PART==0 || PART==4){
+		unsigned int associativities[] = {2, 4, 8, 16};
+		max=4;
+		if(FINEDEB)
+			max=1;
+		for(int i=0; i<max; i++){
+			SAC sac = SAC(&reader, associativities[i], false);
+			cout << "\n" << associativities[i] << "-Way Set-Associative Cache: No allocation on write miss" << endl;
+			sac.run();
+			cout << sac.percent() << "% Accurate: " << sac.getHits() << ", " << sac.getTotal() << "\n" << endl;
+			if(OUTPUT)
+				output << sac.getHits() << "," << sac.getTotal() << "; ";
+		}
+	}
 	
 	} catch (exception e){
 		cout << "\nException caught" << endl;
@@ -341,6 +355,34 @@ void DMC::printVars(){
 }
 
 SAC::SAC(FileReader * reader, unsigned int associativity){
+	this->allocate_on_wrte_miss=true;
+	this->reader=reader; 
+	this->tracker=Tracker();
+	this->set_associativity=associativity;
+	this->tag_max=1;
+	this->tag_size=1;
+	this->index_max=1;
+	this->index_size=1;
+	this->fdb_looper=0;
+	this->setSizesAndMaxes();
+	this->lines=vector<vector<CacheLine>>();
+	this->lru=vector<vector<int>>();
+	for(unsigned int i=0; i<this->index_max; i++){
+		this->lines.push_back(vector<CacheLine>());
+		this->lru.push_back(vector<int>());
+		for(unsigned int j=0; j<this->set_associativity; j++){
+			this->lines[i].push_back(CacheLine(i));
+			this->lru[i].push_back(this->set_associativity-j-1);
+		}
+		this->lines[i].shrink_to_fit();
+		this->lru[i].shrink_to_fit();
+	}
+	this->lines.shrink_to_fit();
+	this->lru.shrink_to_fit();
+}
+
+SAC::SAC(FileReader * reader, unsigned int associativity, bool allocate_on_write_miss){
+	this->allocate_on_wrte_miss=false;
 	this->reader=reader; 
 	this->tracker=Tracker();
 	this->set_associativity=associativity;
@@ -459,19 +501,21 @@ bool SAC::step(){
 		}
 	}
 	inner_index=0;
-	for(unsigned int i=0; i<this->lru[index].size(); i++){
-		if(this->lru[index][i]>this->lru[index][inner_index])
-			inner_index=i;
-	}
-	if(this->lru[index][inner_index]!=0){
+	if(this->allocate_on_write_miss || !current.isStore()){
 		for(unsigned int i=0; i<this->lru[index].size(); i++){
-			this->lru[index][i]++;
+			if(this->lru[index][i]>this->lru[index][inner_index])
+				inner_index=i;
 		}
-		this->lru[index][inner_index]=0;
+		if(this->lru[index][inner_index]!=0){
+			for(unsigned int i=0; i<this->lru[index].size(); i++){
+				this->lru[index][i]++;
+			}
+			this->lru[index][inner_index]=0;
+		}
+		this->lines[index][inner_index].tag=tag;
+		this->lines[index][inner_index].address=current.getAddress(); //used for debugging
+		this->lines[index][inner_index].valid=true;
 	}
-	this->lines[index][inner_index].tag=tag;
-	this->lines[index][inner_index].address=current.getAddress(); //used for debugging
-	this->lines[index][inner_index].valid=true;
 	this->tracker.addMiss();
 	return false;
 }
@@ -656,3 +700,4 @@ void FAC::printVars(){
 	cout << "tag_size:   \t" << dec << this->tag_size << "\tbits\t| tag_max:   \t0x" << hex << this->tag_max << dec << endl;
 	cout << "offset_size:\t" << dec << this->offset_size << "\tbits\t| offset_max: \t0x" << hex << this->offset_max << dec << endl;
 }
+

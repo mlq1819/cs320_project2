@@ -118,6 +118,7 @@ class SAC{
 		unsigned int offset_size;
 		unsigned int offset_max;
 		unsigned int fdb_looper;
+		bool allocate_on_write_miss;
 		std::vector<std::vector<CacheLine>> lines;
 		std::vector<std::vector<int>> lru;
 		Tracker tracker;
