@@ -160,10 +160,10 @@ class FAC{
 		void printCache();
 		void printVars();
 	public:
-		SAC(FileReader *);
+		FAC(FileReader *);
 		unsigned int getCacheSize() const {return this->cache_size;};
 		Line operator[](std::size_t index) const {return (*this->reader)[index];};
-		unsigned long numLines() const {return (cache_size*1024)/line_size/this->set_associativity;};
+		unsigned long numLines() const {return (cache_size*1024)/line_size;};
 		unsigned int getTagSize() const {return this->tag_size;};
 		unsigned long getHits() const {return this->tracker.getHits();};
 		unsigned long getMisses() const {return this->tracker.getMisses();};

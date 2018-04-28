@@ -622,8 +622,7 @@ bool FAC::step(){
 }
 
 void FAC::printCache(){
-	unsigned long num_lines=this->numLines();
-	for(unsigned long i=0; i<num_lines; i++){
+	for(unsigned long i=0; i<this->lines.size(); i++){
 		for(unsigned int j=0; j<this->lines[i].size(); j++){
 			this->lines[i][j].printLine();
 			cout << ";   \t";
