@@ -1,7 +1,7 @@
 #include "cache-sim.h"
 #define FORCE false
 #define OUTPUT true
-#define DEBUG true
+#define DEBUG false
 #define FINEDEB false
 #define PART 0
 #include <vector>
