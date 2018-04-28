@@ -141,7 +141,40 @@ class SAC{
 		bool step();
 };
 
-class FAC{
+class FACL{
+	private:
+		FileReader * reader;
+		const unsigned int cache_size = 16;
+		const unsigned int line_size = 32;
+		unsigned int tag_size;
+		unsigned int index_size;
+		unsigned int index_max;
+		unsigned int tag_max;
+		unsigned int offset_size;
+		unsigned int offset_max;
+		unsigned int fdb_looper;
+		std::vector<CacheLine> lines;
+		std::vector<int> lru;
+		Tracker tracker;
+		void setSizesAndMaxes();
+		unsigned long maxAddress() const;
+		void printCache();
+		void printVars();
+	public:
+		FAL(FileReader *);
+		unsigned int getCacheSize() const {return this->cache_size;};
+		Line operator[](std::size_t index) const {return (*this->reader)[index];};
+		unsigned long numLines() const {return (cache_size*1024)/line_size;};
+		unsigned int getTagSize() const {return this->tag_size;};
+		unsigned long getHits() const {return this->tracker.getHits();};
+		unsigned long getMisses() const {return this->tracker.getMisses();};
+		unsigned long getTotal() const {return this->tracker.getTotal();};
+		double percent() const {return this->tracker.percent();};
+		double run();
+		bool step();
+};
+
+class FACH{
 	private:
 		FileReader * reader;
 		const unsigned int cache_size = 16;
@@ -162,7 +195,7 @@ class FAC{
 		void printCache();
 		void printVars();
 	public:
-		FAC(FileReader *);
+		FAH(FileReader *);
 		unsigned int getCacheSize() const {return this->cache_size;};
 		Line operator[](std::size_t index) const {return (*this->reader)[index];};
 		unsigned long numLines() const {return (cache_size*1024)/line_size;};
