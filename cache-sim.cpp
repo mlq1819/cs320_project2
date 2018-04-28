@@ -3,6 +3,7 @@
 #define OUTPUT true
 #define DEBUG true
 #define FINEDEB false
+#define PART 3
 #include <vector>
 
 using namespace std;
@@ -51,43 +52,50 @@ int main(int argc, char *argv[]){
 	file.close();
 	if(OUTPUT)
 		cout << "Outputting to " << argv[2] << endl;
+	int max;
 	
-	unsigned int sizes[] = {1, 4, 16, 32};
-	int max = 4;
-	if(FINEDEB)
-		max=1;
-	for(int i=0; i<max; i++){
-		DMC dmc = DMC(&reader, sizes[i]);
-		cout << "\nDirect-Mapped Cache: " << sizes[i] << "kB" << endl;
-		dmc.run();
-		cout << dmc.percent() << "% Accurate: " << dmc.getHits() << ", " << dmc.getTotal() << "\n" << endl;
+	if(PART==0 || PART==1{
+		unsigned int sizes[] = {1, 4, 16, 32};
+		max = 4;
+		if(FINEDEB)
+			max=1;
+		for(int i=0; i<max; i++){
+			DMC dmc = DMC(&reader, sizes[i]);
+			cout << "\nDirect-Mapped Cache: " << sizes[i] << "kB" << endl;
+			dmc.run();
+			cout << dmc.percent() << "% Accurate: " << dmc.getHits() << ", " << dmc.getTotal() << "\n" << endl;
+			if(OUTPUT)
+				output << dmc.getHits() << "," << dmc.getTotal() << "; ";
+		}
 		if(OUTPUT)
-			output << dmc.getHits() << "," << dmc.getTotal() << "; ";
-	}
-	if(OUTPUT)
-			output << endl;
-	
-	unsigned int associativities[] = {2, 4, 8, 16};
-	max =4;
-	if(FINEDEB)
-		max=1;
-	for(int i=0; i<max; i++){
-		SAC sac = SAC(&reader, associativities[i]);
-		cout << "\n" << associativities[i] << "-Way Set-Associative Cache" << endl;
-		sac.run();
-		cout << sac.percent() << "% Accurate: " << sac.getHits() << ", " << sac.getTotal() << "\n" << endl;
-		if(OUTPUT)
-			output << sac.getHits() << "," << sac.getTotal() << "; ";
+				output << endl;
 	}
 	
-	FAC fac = FAC(&reader);
-	cout << "\nFully-Associative Cache" << endl;
-	fac.run();
-	cout << fac.percent() << "% Accurate: " << fac.getHits() << ", " << fac.getTotal() << "\n" << endl;
-	if(OUTPUT)
-		output << fac.getHits() << "," << fac.getTotal() << "; ";
-	if(OUTPUT)
-			output << endl;
+	if(PART==0 || PART==2){
+		unsigned int associativities[] = {2, 4, 8, 16};
+		max =4;
+		if(FINEDEB)
+			max=1;
+		for(int i=0; i<max; i++){
+			SAC sac = SAC(&reader, associativities[i]);
+			cout << "\n" << associativities[i] << "-Way Set-Associative Cache" << endl;
+			sac.run();
+			cout << sac.percent() << "% Accurate: " << sac.getHits() << ", " << sac.getTotal() << "\n" << endl;
+			if(OUTPUT)
+				output << sac.getHits() << "," << sac.getTotal() << "; ";
+		}
+	}
+	
+	if(PART==0 || PART==3){
+		FAC fac = FAC(&reader);
+		cout << "\nFully-Associative Cache" << endl;
+		fac.run();
+		cout << fac.percent() << "% Accurate: " << fac.getHits() << ", " << fac.getTotal() << "\n" << endl;
+		if(OUTPUT)
+			output << fac.getHits() << "," << fac.getTotal() << "; ";
+		if(OUTPUT)
+				output << endl;
+	}
 	
 	
 	} catch (exception e){
@@ -506,7 +514,7 @@ FAC::FAC(FileReader * reader){
 		this->lines.push_back(vector<CacheLine>());
 		this->lru.push_back(vector<int>());
 		for(unsigned int j=0; j<num_lines/2; j++){
-			this->lines[i].push_back(CacheLine(i));
+			this->lines[i].push_back(CacheLine(j*(i+1)));
 			this->lru[i].push_back((num_lines/2)-j-1);
 		}
 		this->lines[i].shrink_to_fit();
