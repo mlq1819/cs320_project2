@@ -610,10 +610,10 @@ bool SAC::step(){
 			Line next = this->reader->peak();
 			if(next.isStore() || next.getAddress()!=0){
 				next_index=(next.getAddress()>>this->offset_size)%this->index_max;
-				unsigned long tag = ((next.getAddress()>>this->offset_size)>>this->index_size);
-				bool hit=false;
+				unsigned long next_tag = ((next.getAddress()>>this->offset_size)>>this->index_size);
+				hit=false;
 				for(next_inner_index=0; next_inner_index<this->lines[next_index].size(); next_inner_index++){
-					if(this->lines[next_index][next_inner_index].valid && this->lines[next_index][next_inner_index].tag==tag){
+					if(this->lines[next_index][next_inner_index].valid && this->lines[next_index][next_inner_index].tag==next_tag){
 						hit=true;
 						break;
 					}
@@ -666,10 +666,10 @@ bool SAC::step(){
 		Line next = this->reader->peak();
 		if(next.isStore() || next.getAddress()!=0){
 			next_index=(next.getAddress()>>this->offset_size)%this->index_max;
-			unsigned long tag = ((next.getAddress()>>this->offset_size)>>this->index_size);
-			bool hit=false;
+			unsigned long next_tag = ((next.getAddress()>>this->offset_size)>>this->index_size);
+			hit=false;
 			for(next_inner_index=0; next_inner_index<this->lines[next_index].size(); next_inner_index++){
-				if(this->lines[next_index][next_inner_index].valid && this->lines[next_index][next_inner_index].tag==tag){
+				if(this->lines[next_index][next_inner_index].valid && this->lines[next_index][next_inner_index].tag==next_tag){
 					hit=true;
 					break;
 				}
