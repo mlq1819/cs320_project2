@@ -78,7 +78,7 @@ int main(int argc, char *argv[]){
 			max=1;
 		for(int i=0; i<max; i++){
 			SAC sac = SAC(&reader, associativities[i]);
-			cout << "\n" << associativities[i] << "-Way Set-Associative Cache" << endl;
+			cout << "\n" << associativities[i] << "-Way Set-Associative Cache: " << endl;
 			sac.run();
 			cout << sac.percent() << "% Accurate: " << sac.getHits() << ", " << sac.getTotal() << "\n" << endl;
 			if(OUTPUT)
@@ -88,7 +88,7 @@ int main(int argc, char *argv[]){
 	
 	if(PART==0 || PART==3){
 		FAC fac = FAC(&reader);
-		cout << "\nFully-Associative Cache" << endl;
+		cout << "\nFully-Associative Cache: " << endl;
 		fac.run();
 		cout << fac.percent() << "% Accurate: " << fac.getHits() << ", " << fac.getTotal() << "\n" << endl;
 		if(OUTPUT)
