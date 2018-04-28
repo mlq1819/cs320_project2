@@ -337,7 +337,7 @@ void DMC::printVars(){
 	cout << "line_size:  \t" << dec << this->line_size << "\tbits\t| maxAddress:\t0x" << hex << this->maxAddress() << dec << endl;
 	cout << "index_size: \t" << dec << this->index_size << "\tbits\t| index_max: \t0x" << hex << this->index_max << dec << endl;
 	cout << "tag_size:   \t" << dec << this->tag_size << "\tbits\t| tag_max:   \t0x" << hex << this->tag_max << dec << endl;
-	cout << "offset_size:\t" << dec << this->offset_size << "\tbits\t| offset_max: \t" << hex << this->offset_max << dec << endl;
+	cout << "offset_size:\t" << dec << this->offset_size << "\tbits\t| offset_max: \t0x" << hex << this->offset_max << dec << endl;
 }
 
 SAC::SAC(FileReader * reader, unsigned int associativity){
@@ -494,7 +494,7 @@ void SAC::printVars(){
 	cout << "line_size:  \t" << dec << this->line_size << "\tbits\t| maxAddress:\t0x" << hex << this->maxAddress() << dec << endl;
 	cout << "index_size: \t" << dec << this->index_size << "\tbits\t| index_max: \t0x" << hex << this->index_max << dec << endl;
 	cout << "tag_size:   \t" << dec << this->tag_size << "\tbits\t| tag_max:   \t0x" << hex << this->tag_max << dec << endl;
-	cout << "offset_size:\t" << dec << this->offset_size << "\tbits\t| offset_max: \t" << hex << this->offset_max << dec << endl;
+	cout << "offset_size:\t" << dec << this->offset_size << "\tbits\t| offset_max: \t0x" << hex << this->offset_max << dec << endl;
 }
 
 FAC::FAC(FileReader * reader){
@@ -654,5 +654,5 @@ void FAC::printVars(){
 	cout << "line_size:  \t" << dec << this->line_size << "\tbits\t| maxAddress:\t0x" << hex << this->maxAddress() << dec << endl;
 	cout << "index_size: \t" << dec << this->index_size << "\tbits\t| index_max: \t0x" << hex << this->index_max << dec << endl;
 	cout << "tag_size:   \t" << dec << this->tag_size << "\tbits\t| tag_max:   \t0x" << hex << this->tag_max << dec << endl;
-	cout << "offset_size:\t" << dec << this->offset_size << "\tbits\t| offset_max: \t" << hex << this->offset_max << dec << endl;
+	cout << "offset_size:\t" << dec << this->offset_size << "\tbits\t| offset_max: \t0x" << hex << this->offset_max << dec << endl;
 }
