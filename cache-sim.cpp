@@ -317,7 +317,7 @@ SAC::SAC(FileReader * reader, unsigned int associativity){
 	this->fdb_looper=0;
 	this->setSizesAndMaxes();
 	this->lines=vector<vector<CacheLine>>();
-	this->lru=vector<<vector<int>>();
+	this->lru=vector<vector<int>>();
 	for(unsigned int i=0; i<this->index_max; i++){
 		this->lines.push_back(vector<CacheLine>());
 		this->lru.push_back(vector<int>());
