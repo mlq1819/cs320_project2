@@ -137,6 +137,6 @@ class SAC{
 		double percent() const {return this->tracker.percent();};
 		double run();
 		bool step();
-}
+};
 
 #endif
