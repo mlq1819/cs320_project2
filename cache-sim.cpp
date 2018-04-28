@@ -471,7 +471,7 @@ void SAC::printCache(){
 }
 
 void SAC::printVars(){
-	cout << "associativity:\t" << dec << this->set_associativity << "\tkB\t| numLines():\t" << dec << this->numLines() << "\tlines\t" << dec << endl;
+	cout << "associativity:\t" << dec << this->set_associativity << "-way\t\t| numLines():\t" << dec << this->numLines() << "\tlines\t" << dec << endl;
 	cout << "--------------------------------+---------------------------" << endl;
 	cout << "line_size:  \t" << dec << this->line_size << "\tbits\t| maxAddress:\t0x" << hex << this->maxAddress() << dec << endl;
 	cout << "index_size: \t" << dec << this->index_size << "\tbits\t| index_max: \t0x" << hex << this->index_max << dec << endl;
