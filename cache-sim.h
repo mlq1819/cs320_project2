@@ -161,7 +161,7 @@ class FACL{
 		void printCache();
 		void printVars();
 	public:
-		FAL(FileReader *);
+		FACL(FileReader *);
 		unsigned int getCacheSize() const {return this->cache_size;};
 		Line operator[](std::size_t index) const {return (*this->reader)[index];};
 		unsigned long numLines() const {return (cache_size*1024)/line_size;};
@@ -195,7 +195,7 @@ class FACH{
 		void printCache();
 		void printVars();
 	public:
-		FAH(FileReader *);
+		FACH(FileReader *);
 		unsigned int getCacheSize() const {return this->cache_size;};
 		Line operator[](std::size_t index) const {return (*this->reader)[index];};
 		unsigned long numLines() const {return (cache_size*1024)/line_size;};
