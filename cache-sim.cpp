@@ -495,9 +495,9 @@ FAC::FAC(FileReader * reader){
 	for(unsigned int i=0; i<2; i++){
 		this->lines.push_back(vector<CacheLine>());
 		this->lru.push_back(vector<int>());
-		for(unsigned int j=0; j<this->num_lines/2; j++){
+		for(unsigned int j=0; j<num_lines/2; j++){
 			this->lines[i].push_back(CacheLine(i));
-			this->lru[i].push_back(this->set_associativity-j-1);
+			this->lru[i].push_back((num_lines/2)-j-1);
 		}
 		this->lines[i].shrink_to_fit();
 		this->lru[i].shrink_to_fit();
